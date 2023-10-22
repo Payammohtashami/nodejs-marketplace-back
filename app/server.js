@@ -1,8 +1,11 @@
 const path = require('path');
 const morgan = require('morgan');
+const router = require('./router/router');
 const express = require('express');
 const mongoose = require('mongoose');
-const router = require('./router/router');
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
+const createErrors = require('http-errors')
 
 module.exports = class Application {
     #app = express();
@@ -19,10 +22,33 @@ module.exports = class Application {
     };
 
     consfigApplication(){
+        this.#app.use(morgan('dev'));
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({extended: true}));
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
-        this.#app.use(morgan('dev'));
+        this.#app.use(
+            "/api-docs",
+            swaggerUI.serve,
+            swaggerUI.setup(
+                swaggerJsDoc({
+                    swaggerDefinition: {
+                        info: {
+                            title: "Marketplace Practice",
+                            version: "1.0.0",
+                            contact: {
+                                name: "Payam Mohtashami",
+                                email: "p.mohtashami.1382.4@gmail.com",
+                            },
+                        },
+                        servers: [
+                            {url: "http://localhost:5000"}
+                        ],
+                    },
+                    apis: ["./app/router/**/*.js"],
+                }),
+                {}
+            )
+        );
     };
 
     createServer(){
@@ -38,31 +64,37 @@ module.exports = class Application {
         }).catch((error) => {
             console.log({error});
         });
+        mongoose.connection.on('connected', () => {
+            console.log('mongoose connected to DB');
+        });
+        mongoose.connection.on('disconncted', () => {
+            console.log('mongoose connection is disconnected!');
+        });
+        process.on('SIGINT', async () => {
+            await mongoose.connection.close();
+            process.exit(0);
+        });
     };
     
     errorHandling(){
         this.#app.use((req, res, next) => {
-            return res.status(404).json({
-                status: 404,
-                message: 'Page Not Found!',
-            });
+            next(createErrors.NotFound('Page not found!'))
         });
         this.#app.use((error, req, res, next) => {
-            const status = error?.status ?? 500;
-            const message = error?.message ?? 'Internal Server Error';
+            const serverError = createErrors.InternalServerError()
+            const status = error?.status ?? serverError.status;
+            const message = error?.message ?? serverError.message;
             return res.status(status).json({
-                status,
-                message,
+                data: null,
+                errors: {
+                    status,
+                    message,
+                }
             })
         });
     };
     
     createRoutes(){
-        this.#app.use(router);
-        this.#app.get('/', (req, res, next) => {
-            return res.status(200).json({
-                message: 'Hello To My Marketplace',
-            });
-        });
+        this.#app.use('/api', router);
     };
 };
