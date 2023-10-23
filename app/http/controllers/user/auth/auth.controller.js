@@ -4,7 +4,7 @@ const createHttpError = require("http-errors");
 const { UsersModel } = require("../../../../models/users.models");
 const { checkOtpSchema, getOtpSchema } = require("../../../validators/user/auth.schema");
 const { EXPIRES_IN, USER_ROLE } = require("../../../../utils/constans");
-const { randomNumberGenerator, SignAccessToken } = require("../../../../utils/functions");
+const { randomNumberGenerator, SignAccessToken, VerifyRefreshToken, SignRefreshToken } = require("../../../../utils/functions");
 
 class UserAuthController extends Controller{
     async getOtp(req, res, next){
@@ -38,10 +38,32 @@ class UserAuthController extends Controller{
             const now = Date.now();
             if(+user.otp.expiresIn < now) createHttpError.Unauthorized('کد شما منقضی شده است');
             const accessToken = await SignAccessToken(user._id)
+            const refreshToken = await SignRefreshToken(user?._id);
             return res.status(200).json({
                 error: null,
                 data: {
-                    accessToken
+                    accessToken,
+                    refreshToken,
+                },
+            });
+        } catch (error) {
+            next(error);
+        };
+    };
+
+    async refreshToken(req, res, next){
+        try {
+            const { refreshToken } = req.body;
+            const mobile = await VerifyRefreshToken(refreshToken);
+            const user = await UsersModel.findOne({mobile});
+            if(!user) throw createHttpError.Unauthorized('شماره موبایل مورد نظر یافت نشد');
+            const accessToken = await SignAccessToken(user?._id);
+            const newRefreshToken = await SignRefreshToken(user?._id);
+            return res.status(200).json({
+                error: null,
+                data: {
+                    accessToken,
+                    refreshToken: newRefreshToken
                 },
             });
         } catch (error) {

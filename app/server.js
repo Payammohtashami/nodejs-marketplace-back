@@ -1,4 +1,5 @@
 const path = require('path');
+const cors = require('cors');
 const morgan = require('morgan');
 const router = require('./router/router');
 const express = require('express');
@@ -23,6 +24,7 @@ module.exports = class Application {
 
     consfigApplication(){
         this.#app.use(morgan('dev'));
+        this.#app.use(cors());
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({extended: true}));
         this.#app.use(express.static(path.join(__dirname, '..', 'public')));
