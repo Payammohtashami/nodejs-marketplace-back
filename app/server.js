@@ -17,6 +17,7 @@ module.exports = class Application {
         this.#DB_URI = DB_URI;
         this.consfigApplication();
         this.connectMongoDB();
+        this.initRedis();
         this.createServer();
         this.createRoutes();
         this.errorHandling();
@@ -77,7 +78,11 @@ module.exports = class Application {
             process.exit(0);
         });
     };
-    
+
+    initRedis(){
+        require('./utils/init_redis')
+    };
+
     errorHandling(){
         this.#app.use((req, res, next) => {
             next(createErrors.NotFound('Page not found!'))
