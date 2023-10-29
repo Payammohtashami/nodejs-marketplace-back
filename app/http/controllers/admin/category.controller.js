@@ -1,10 +1,11 @@
 const createHttpError = require("http-errors");
 const { CategoryModel } = require("../../../models/categories.models");
 const Controller = require("../controller");
-const { addCategorySchema } = require("../../validators/admin/category.schema");
+const { addCategorySchema, updateCategorySchema } = require("../../validators/admin/category.schema");
 const { default: mongoose } = require("mongoose");
 
 class CategoryController extends Controller {
+
     async addCategory(req, res, next){
         try {
             await addCategorySchema.validateAsync(req.body);
@@ -14,7 +15,6 @@ class CategoryController extends Controller {
             return res.status(200).json({
                 error: null,
                 data: {
-                    category,
                     status: 200,
                     message: 'دسته بندی با موفقیت افزوده شد',
                 },
@@ -24,9 +24,23 @@ class CategoryController extends Controller {
         }
     };
 
-    editCategory(req, res, next){
+    async updateCategory(req, res, next){
         try {
-            
+            const { id } = req.params;   
+            const { title } = req.body;
+            const category = await this.findExistCategory(id);
+            await updateCategorySchema.validateAsync(req.body);
+            if(!category) throw createHttpError.NotFound('دسته بندی مورد نظر یافت نشد');
+            const resultOfUpdate = await CategoryModel.updateOne({_id: category._id}, {$set: {title}});
+            if(resultOfUpdate.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی دسته بندی انجام نشد');
+            return res.status(201).json({
+                error: null,
+                data: {
+                    status: 201,
+                    message: 'دسته بندی با موفقیت به روز رسانی شد',
+                    category: resultOfUpdate,
+                }
+            });
         } catch (error) {
             next(error);
         }
@@ -57,35 +71,36 @@ class CategoryController extends Controller {
 
     async getAllCategory(req, res, next){
         try {
-            const category = await CategoryModel.aggregate([
-                {
-                    $graphLookup: {
-                        as: 'children',
-                        from: 'categories',
-                        maxDepth: 5,
-                        startWith: '$_id',
-                        depthField: 'depth',
-                        connectToField: 'parent',
-                        connectFromField: '_id',
+            // const category = await CategoryModel.aggregate([
+            //     {
+            //         $graphLookup: {
+            //             as: 'children',
+            //             from: 'categories',
+            //             maxDepth: 5,
+            //             startWith: '$_id',
+            //             depthField: 'depth',
+            //             connectToField: 'parent',
+            //             connectFromField: '_id',
 
-                    },
-                },
-                {
-                    $project: {
-                        __v: 0,
-                        'children.__v': 0,
-                        'children.parent': 0,
-                    },
-                },
-                {
-                    $match: {
-                        parent: null || undefined,
-                    }
-                }
-            ]);
+            //         },
+            //     },
+            //     {
+            //         $project: {
+            //             __v: 0,
+            //             'children.__v': 0,
+            //             'children.parent': 0,
+            //         },
+            //     },
+            //     {
+            //         $match: {
+            //             parent: null || undefined,
+            //         }
+            //     }
+            // ]);
+            const categories = await CategoryModel.find({parent: undefined}, {__v: 0});
             return res.status(200).json({
                 error: null,
-                data: { status: 200, category },
+                data: { status: 200, categories },
             })
             
         } catch (error) {
@@ -160,6 +175,26 @@ class CategoryController extends Controller {
         } catch (error) {
             next(error);
         }
+    };
+
+    async getAllCategoriesWithoutPopulate(req, res, next){
+        try {
+            const categories = await CategoryModel.aggregate([
+                {
+                    $match: {}
+                }
+            ]);
+            if(!categories) throw createHttpError.InternalServerError('مشکل سروری به وجود آمده است'); 
+            return res.status(200).json({
+                error: null,
+                data: {
+                    status: 200,
+                    categories,
+                }
+            })
+        } catch (error) {
+            next(error);
+        };
     };
 
     async findExistCategory(id){
