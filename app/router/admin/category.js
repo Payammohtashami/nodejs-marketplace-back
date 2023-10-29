@@ -88,6 +88,29 @@ router.get('/children/:parent', CategoryController.getchildrenOfParents);
 
 /**
  * @swagger
+ *  /api/admin/category/{id}:
+ *      get:
+ *          tags: [Admin-Panel]
+ *          summary: get category by object-id
+ *          parameters:
+ *          -   in: path
+ *              type: string
+ *              required: true
+ *              name: id
+ *          responses:
+ *              201: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+router.get('/:id', CategoryController.getCategoryById);
+
+/**
+ * @swagger
  *  /api/admin/category/remove/{id}:
  *      delete:
  *          tags: [Admin-Panel]
@@ -109,6 +132,4 @@ router.get('/children/:parent', CategoryController.getchildrenOfParents);
  */
 router.delete('/remove/:id', CategoryController.removeCategory);
 
-module.exports = {
-    categoryRoutes: router
-};
+module.exports = { categoryRoutes: router };
