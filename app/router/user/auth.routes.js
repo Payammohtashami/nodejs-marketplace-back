@@ -2,12 +2,7 @@ const { UserAuthController } = require('../../http/controllers/user/auth/auth.co
 
 const router = require('express').Router();
 
-/**
- * @swagger
- *  tags:
- *      name : User-Authentication
- *      description : user-auth section
- */
+
 
 /**
  * @swagger

@@ -4,13 +4,6 @@ const { randomNumberGenerator } = require('../utils/functions');
 
 /**
  * @swagger
- *  tags:
- *      name: Developer-Routes
- *      description: developer-Utils
- */
-
-/**
- * @swagger
  *  /api/developer/password-hash/{password}:
  *      get:
  *          tags: [Developer-Routes]

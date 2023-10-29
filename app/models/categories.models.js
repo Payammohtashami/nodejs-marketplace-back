@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const Schema = new mongoose.Schema({
     title: {type: String, required: true},
+    parent: {type: mongoose.Types.ObjectId, default: null},
 });
 
 module.exports = {
-    CategoriesModel: mongoose.model('Category', Schema)
+    CategoryModel: mongoose.model('Category', Schema)
 };
