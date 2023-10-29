@@ -22,6 +22,8 @@ const Schema = new mongoose.Schema({
         width: 0,
         height: 0,
     }},
+}, {
+    versionKey: false,
 });
 
 module.exports = {

@@ -16,7 +16,10 @@ const Schema = new mongoose.Schema({
     bills: {type: [], default: []},
     discount: {type: Number, default: 0},
     birthday: {type: String},
-},);
+},{
+    versionKey: false,
+    timestamps: true,
+});
 
 module.exports = {
     UsersModel: mongoose.model('Users', Schema)
