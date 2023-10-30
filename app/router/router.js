@@ -4,6 +4,7 @@ const { categoryRoutes } = require('./admin/category.routes');
 const { UserAuthRoutes } = require('./user/auth.routes');
 const { DeveloperRoutes } = require('./developer.routes');
 const { blogsRoutes } = require('./admin/blog.routes');
+const VerifyAccessToken = require('../http/middlewares/verifyAccessToken');
 
 /**
  * @swagger
@@ -20,7 +21,7 @@ const { blogsRoutes } = require('./admin/blog.routes');
 
 
 router.use('/admin/category', categoryRoutes);
-router.use('/admin/blog', blogsRoutes);
+router.use('/admin/blog', VerifyAccessToken, blogsRoutes);
 router.use('/developer', DeveloperRoutes);
 router.use('/user', UserAuthRoutes);
 router.use('/', HomeRoutes);

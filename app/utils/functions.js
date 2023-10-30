@@ -47,11 +47,12 @@ function SignRefreshToken(userID){
 function VerifyRefreshToken(token){
     return new Promise((resolve, reject) => {
         jwt.verify(token, REFRSH_TOKEN_SECRET_KEY, async (err, payload) => {
-            if(err) return reject(createHttpError.Unauthorized('1 وارد حساب کاربری خود شوید'))
+            if(err) return reject(createHttpError.Unauthorized('وارد حساب کاربری خود شوید'))
             const { mobile } = payload || {};
             const user = await UsersModel.findOne({mobile}, {password: 0, otp: 0, bills: 0});
             if(!user) reject(createHttpError.Unauthorized('کاربر یافت نشد'))
-            const refreshToken = await redisClient.get(user._id);
+            const refreshToken = await redisClient.get(user?._id || 'key_default');
+            if(!refreshToken) reject(createHttpError.Unauthorized('ورود مجدد به حساب کاربری انجام نشد')); 
             if(refreshToken === token) return resolve(mobile);
             reject(createHttpError.Unauthorized('ورود مجدد به حساب کاربری انجام نشد')); 
         });
@@ -60,7 +61,8 @@ function VerifyRefreshToken(token){
 
 
 function deleteFileInPublic(fileAddress){
-    const pathFile = path.join(__dirname, '..', '..', 'public', fileAddress)
+    console.log({fileAddress}, 'fileAddress');
+    const pathFile = "" + path.join(__dirname, '..', '..', 'public', fileAddress)
     fs.unlinkSync(pathFile);
 }; 
 

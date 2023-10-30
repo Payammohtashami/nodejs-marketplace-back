@@ -19,6 +19,9 @@ const Schema = new mongoose.Schema({
 },{
     versionKey: false,
     timestamps: true,
+    toJSON: {
+        virtuals: true
+    },
 });
 
 module.exports = {
