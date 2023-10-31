@@ -3,21 +3,46 @@ const createHttpError = require('http-errors');
 const { UsersModel } = require('../../models/users.models');
 const { ACCESS_TOKEN_SECRET_KEY } = require('../../utils/constans');
 
-function VerifyAccessToken(req, res, next){
-    const headers = req.headers;
-    const [bearer, token] = headers?.['access-token']?.split(' ') || [];
+function getToken(headers){
+    const [bearer, token] = headers?.authorization?.split(' ') || [];
     if(!!token && ['bearer', 'Bearer'].includes(bearer)) {
+        return token;
+    } throw createHttpError.Unauthorized('کاربر یافت نشد');
+};
+
+function VerifyAccessToken(req, res, next){
+    try {
+        const token = getToken(req.headers);
         jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, async (err, payload) => {
-            if(err) return next(createHttpError.Unauthorized('وارد حساب کاربری خود شوید'))
-            const { mobile } = payload || {};
-            const user = await UsersModel.findOne({mobile}, {password: 0, otp: 0, bills: 0});
-            if(!user) createHttpError.Unauthorized('کاربر یافت نشد')
-            req.user = user;
-            return next();
+            try {
+                if(err) return next(createHttpError.Unauthorized('وارد حساب کاربری خود شوید'))
+                const { mobile } = payload || {};
+                const user = await UsersModel.findOne({mobile}, {password: 0, otp: 0, bills: 0});
+                if(!user) throw createHttpError.Unauthorized('کاربر یافت نشد')
+                req.user = user;
+                return next();
+            } catch (error) {
+                next(error);                
+            }
         });
-    } else {
-        return next(createHttpError.Unauthorized('وارد حساب کاربری خود شوید'))
+    } catch (error) {
+        next(error);
+    }
+};
+
+function checkRole(role){
+    return function(req, res, next){
+        try {
+            const user = req.user;
+            if(user.roles.includes(role)) return next();
+            throw createHttpError.Forbidden('شما به این آدرس دسترسی ندارید');
+        } catch (error) {
+            next(error);
+        }
     };
 };
 
-module.exports = VerifyAccessToken;
+module.exports = { 
+    checkRole,
+    VerifyAccessToken
+};

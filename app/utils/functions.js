@@ -61,7 +61,6 @@ function VerifyRefreshToken(token){
 
 
 function deleteFileInPublic(fileAddress){
-    console.log({fileAddress}, 'fileAddress');
     const pathFile = "" + path.join(__dirname, '..', '..', 'public', fileAddress)
     fs.unlinkSync(pathFile);
 }; 

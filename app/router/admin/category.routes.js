@@ -1,6 +1,23 @@
+const router = require('express').Router();
 const { CategoryController } = require('../../http/controllers/admin/category.controller');
 
-const router = require('express').Router();
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          Create:
+ *              type: object
+ *              required:
+ *                  -   title
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: Enter categories title
+ *                  parent:
+ *                      type: string
+ *                      description: Enter categories parent
+ */
+
 
 /**
  * @swagger
@@ -8,13 +25,12 @@ const router = require('express').Router();
  *      post:
  *          tags: [Admin-Categories]
  *          summary: create new category
- *          parameters:
- *          -   in: formData
+ *          requestBody:
  *              required: true
- *              name: title
- *          -   in: formData
- *              required: false
- *              name: parent
+ *              content:
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Create'
  *          responses:
  *              201: 
  *                  description: Success

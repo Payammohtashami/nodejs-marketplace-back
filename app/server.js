@@ -35,6 +35,7 @@ module.exports = class Application {
             swaggerUI.setup(
                 swaggerJsDoc({
                     swaggerDefinition: {
+                        openapi: '3.0.0',
                         info: {
                             title: "Marketplace Practice",
                             version: "1.0.0",
@@ -46,10 +47,20 @@ module.exports = class Application {
                         servers: [
                             {url: "http://localhost:5000"}
                         ],
+                        components: {
+                            securitySchemes: {
+                                BearerAuth: {
+                                    type: "http",
+                                    scheme: 'bearer',
+                                    bearerFormat: 'JWT'
+                                },
+                            },
+                        },
+                        security: [{BearerAuth: []}]
                     },
                     apis: ["./app/router/**/*.js"],
                 }),
-                {}
+                {explorer: true}
             )
         );
     };
@@ -105,3 +116,8 @@ module.exports = class Application {
         this.#app.use('/api', router);
     };
 };
+
+// {
+//     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTE4Nzk1ODgwNSIsImlhdCI6MTY5ODc4NzkxMiwiZXhwIjoxNjk4NzkxNTEyfQ.ejJ0j2HtamgXz_6rxN2QHOZx8prR5Z5-60RkzgS0654",
+//     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTE4Nzk1ODgwNSIsImlhdCI6MTY5ODc4NzkxMiwiZXhwIjoxNzMwMzQ1NTEyfQ.tCCXtoRbaR7vfpG__idWgSKs7o7CBVvjZjiyCabZ2nc"
+// }

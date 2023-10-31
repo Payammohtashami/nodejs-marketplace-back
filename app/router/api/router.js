@@ -1,5 +1,5 @@
 const HomeController = require('../../http/controllers/api/home.controller');
-const VerifyAccessToken = require('../../http/middlewares/verifyAccessToken');
+const { VerifyAccessToken } = require('../../http/middlewares/verifyAccessToken');
 
 const router = require('express').Router();
 
@@ -8,12 +8,6 @@ const router = require('express').Router();
  *  /api:
  *      get:
  *          tags: [Index-Page]
- *          summary: login user in userpanel with phone number
- *          description: one time password(OTP) login
- *          parameters:
- *          -   in: header
- *              name: access-token
- *              example: Bearer YourAccessToken
  *          responses:
  *              201: 
  *                  description: Success
