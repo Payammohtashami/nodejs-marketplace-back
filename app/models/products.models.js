@@ -16,7 +16,7 @@ const Schema = new mongoose.Schema({
     like: {type: [mongoose.Types.ObjectId], default: []},
     bookmark: {type: [mongoose.Types.ObjectId], default: []},
     format: {type: String},
-    supplier: {type: mongoose.Types.ObjectId, required: true},
+    supplier: {type: mongoose.Types.ObjectId, required: false},
     feature: {type: Object, default: {
         length: 0,
         width: 0,

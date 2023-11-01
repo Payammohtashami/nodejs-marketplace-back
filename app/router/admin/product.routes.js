@@ -15,7 +15,7 @@ const { uploadFile } = require('../../utils/multer');
  *                  -   price
  *                  -   tags
  *                  -   description
- *                  -   image
+ *                  -   images
  *                  -   category
  *                  -   teacher
  *              properties:
@@ -46,9 +46,12 @@ const { uploadFile } = require('../../utils/multer');
  *                  discount:
  *                      type: string
  *                      description: product teacher
- *                  image:
- *                      type: file
- *                      description: product image
+ *                  images:
+ *                      type: array
+ *                      description: product images
+ *                      items:
+ *                          type: string
+ *                          format: binary
  *                  height:
  *                      type: string
  *                      description: height of product pack
@@ -66,7 +69,7 @@ const { uploadFile } = require('../../utils/multer');
 
 /**
  * @swagger
- *  /api/admin/products:
+ *  /api/admin/products/add:
  *      post:
  *          tags: [Products(Admin-Panel)]
  *          summary: create and save products
@@ -88,7 +91,24 @@ const { uploadFile } = require('../../utils/multer');
  *              500: 
  *                  description: Internal Server Error 
  */
-router.post('/', uploadFile.single('image'), stringToArray('tags'), ProductController.addProduct);
-router.get('/', ProductController.getAllProducts);
+router.post('/add', uploadFile.array('images', 10), stringToArray('tags'), ProductController.addProduct);
+/**
+ * @swagger
+ *  /api/admin/products/all:
+ *      get:
+ *          tags: [Products(Admin-Panel)]
+ *          summary: get all products
+
+ *          responses:
+ *              200: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+router.get('/all', ProductController.getAllProducts);
 
 module.exports = { productsRoutes: router };
