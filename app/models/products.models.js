@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
+const { commentSchema } = require('./public.models');
 
 const Schema = new mongoose.Schema({
     title: {type: String, required: true},
     subtitle: {type: String, required: true},
-    description: {type: String},
+    description: {type: String, required: true},
     images: {type: [String], required: true},
     tags: {type: [String], required: true},
-    comments: {type: [], default: []},
-    category: {type: mongoose.Types.ObjectId, required: true},
+    comments: {type: [commentSchema], default: []},
+    category: {type: mongoose.Types.ObjectId, ref: 'Category', required: true},
     price: {type: Number, required: true},
-    discount: {type: Number},
+    count: {type: Number},
     avaliable_counts: {type: Number},
     type: {type: String, required: true},
     like: {type: [mongoose.Types.ObjectId], default: []},
     bookmark: {type: [mongoose.Types.ObjectId], default: []},
-    time: {type: String},
     format: {type: String},
-    teacher: {type: mongoose.Types.ObjectId, required: true},
+    supplier: {type: mongoose.Types.ObjectId, required: true},
     feature: {type: Object, default: {
         length: 0,
         width: 0,

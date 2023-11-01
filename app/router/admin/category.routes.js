@@ -23,7 +23,7 @@ const { CategoryController } = require('../../http/controllers/admin/category.co
  * @swagger
  *  /api/admin/category/add:
  *      post:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: create new category
  *          requestBody:
  *              required: true
@@ -47,7 +47,7 @@ router.post('/add', CategoryController.addCategory);
  * @swagger
  *  /api/admin/category/all:
  *      get:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: get all categories parents
  *          responses:
  *              201: 
@@ -65,7 +65,7 @@ router.get('/all', CategoryController.getAllCategory);
  * @swagger
  *  /api/admin/category/list-of-all:
  *      get:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: get all categories with out populate and nested structure
  *          responses:
  *              201: 
@@ -83,7 +83,7 @@ router.get('/list-of-all', CategoryController.getAllCategoriesWithoutPopulate);
  * @swagger
  *  /api/admin/category/parents:
  *      get:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: get all categories parents children
  *          responses:
  *              201: 
@@ -101,7 +101,7 @@ router.get('/parents', CategoryController.getAllParents);
  * @swagger
  *  /api/admin/category/children/{parent}:
  *      get:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: get all categories parents
  *          parameters:
  *          -   in: path
@@ -124,7 +124,7 @@ router.get('/children/:parent', CategoryController.getchildrenOfParents);
  * @swagger
  *  /api/admin/category/remove/{id}:
  *      delete:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: remove category by id
  *          parameters:
  *          -   in: path
@@ -147,7 +147,7 @@ router.delete('/remove/:id', CategoryController.removeCategory);
  * @swagger
  *  /api/admin/category/update/{id}:
  *      patch:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: Update category by id
  *          parameters:
  *          -   in: path
@@ -174,7 +174,7 @@ router.patch('/update/:id', CategoryController.updateCategory);
  * @swagger
  *  /api/admin/category/{id}:
  *      get:
- *          tags: [Admin-Categories]
+ *          tags: [Category(Admin-Panel)]
  *          summary: get category by object-id
  *          parameters:
  *          -   in: path

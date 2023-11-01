@@ -42,7 +42,7 @@ const { BlogController } = require('../../http/controllers/admin/blog.controller
  * @swagger
  *  /api/admin/blog/list-all:
  *      get:
- *          tags: [Admin-Blogs]
+ *          tags: [Blogs(Admin-Panel)]
  *          summary: get all blogs
  *          responses:
  *              201: 
@@ -60,7 +60,7 @@ router.get('/list-all', BlogController.getListOfBlogs);
  * @swagger
  *  /api/admin/blog/{id}:
  *      get:
- *          tags: [Admin-Blogs]
+ *          tags: [Blogs(Admin-Panel)]
  *          summary: get blog by object-id
  *          parameters:
  *          -   in: path
@@ -83,7 +83,7 @@ router.get('/:id', BlogController.getOneBlogById);
  * @swagger
  *  /api/admin/blog/remove/{id}:
  *      delete:
- *          tags: [Admin-Blogs]
+ *          tags: [Blogs(Admin-Panel)]
  *          summary: remove blog by object-id
  *          parameters:
  *          -   in: path
@@ -106,7 +106,7 @@ router.delete('/remove/:id', BlogController.removeBlogById);
  * @swagger
  *  /api/admin/blog/add:
  *      post:
- *          tags: [Admin-Blogs]
+ *          tags: [Blogs(Admin-Panel)]
  *          summary: create new blogs
  *          consumes:
  *          -   multipart/form-data
@@ -132,7 +132,7 @@ router.post( '/add', uploadFile.single('image'), stringToArray('tags'),  BlogCon
  * @swagger
  *  /api/admin/blog/update/{id}:
  *      patch:
- *          tags: [Admin-Blogs]
+ *          tags: [Blogs(Admin-Panel)]
  *          summary: update blog document by object-id
  *          consumes:
  *          -   multipart/form-data

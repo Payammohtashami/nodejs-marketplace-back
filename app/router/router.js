@@ -5,21 +5,25 @@ const { UserAuthRoutes } = require('./user/auth.routes');
 const { DeveloperRoutes } = require('./developer.routes');
 const { blogsRoutes } = require('./admin/blog.routes');
 const { VerifyAccessToken, checkRole } = require('../http/middlewares/verifyAccessToken');
+const { productsRoutes } = require('./admin/product.routes');
 
 /**
  * @swagger
  *  tags:
  *      -   name: Developer-Routes
  *          description: developer-Utils
- *      -   name: Admin-Categories
+ *      -   name: Category(Admin-Panel)
  *          description: admins categories managment routes
- *      -   name: Admin-Blogs
+ *      -   name: Blogs(Admin-Panel)
  *          description: admins blog managment routes
+ *      -   name : Products(Admin-Panel)
+ *          description : managment product routes
  *      -   name : User-Authentication
  *          description : user-auth section
  */
 
 
+router.use('/admin/products', VerifyAccessToken, checkRole('ADMIN'), productsRoutes);
 router.use('/admin/category', VerifyAccessToken, checkRole('ADMIN'), categoryRoutes);
 router.use('/admin/blog', VerifyAccessToken, checkRole('ADMIN'), blogsRoutes);
 router.use('/developer', DeveloperRoutes);

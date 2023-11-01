@@ -1,10 +1,10 @@
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 const redisClient = require('./init_redis');
 const createHttpError = require('http-errors');
 const { UsersModel } = require('../models/users.models');
 const { ACCESS_TOKEN_SECRET_KEY, REFRSH_TOKEN_SECRET_KEY } = require('./constans');
-const path = require('path');
 
 function randomNumberGenerator(){
     return Math.floor((Math.random() * 90000) + 10000);
@@ -17,7 +17,7 @@ function SignAccessToken(userID){
             mobile: user.mobile,
         };
         const options = {
-            expiresIn: '1h'
+            expiresIn: '14d'
         };
         jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, options, (err, token) => {
             if(err) reject(createHttpError.InternalServerError('خطای سمت سرور به وجود آمده است'));
@@ -51,7 +51,7 @@ function VerifyRefreshToken(token){
             const { mobile } = payload || {};
             const user = await UsersModel.findOne({mobile}, {password: 0, otp: 0, bills: 0});
             if(!user) reject(createHttpError.Unauthorized('کاربر یافت نشد'))
-            const refreshToken = await redisClient.get(user?._id || 'key_default');
+            const refreshToken = await redisClient.get(user?._id.toString() || 'key_default');
             if(!refreshToken) reject(createHttpError.Unauthorized('ورود مجدد به حساب کاربری انجام نشد')); 
             if(refreshToken === token) return resolve(mobile);
             reject(createHttpError.Unauthorized('ورود مجدد به حساب کاربری انجام نشد')); 
