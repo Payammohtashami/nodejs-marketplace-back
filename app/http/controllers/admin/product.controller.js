@@ -1,6 +1,7 @@
 const path = require('path');
 const Controller = require("../controller");
 const createHttpError = require("http-errors");
+const { StatusCodes } =require('http-status-codes');
 const { ProductsModel } = require("../../../models/products.models");
 const { addProductsSchema } = require("../../validators/admin/products.schema");
 const { listOfImagesFromRequest } = require('../../../utils/functions');
@@ -14,19 +15,19 @@ class ProductController extends Controller {
             const {title, subtitle, description, tags, category, price, discount, avaliable_counts, height, width, weight, length } = req.body;
             const auther = req.user._id;
             let feture = {
-                height: height ?? 0,
-                width: width ?? 0,
-                weight: weight ?? 0,
-                length: length ?? 0,
+                height: +height ?? 0,
+                width: +width ?? 0,
+                weight: +weight ?? 0,
+                length: +length ?? 0,
             };
             let type = 'phisical';
             if(!!height || !!width || !!length || !!weight) type = 'virtual'
             const products = await ProductsModel.create({auther, title, subtitle, description, images, tags, category, feture, type, discount, price, avaliable_counts});
             if(!products) throw createHttpError.InternalServerError('ثبت محصول انجام نشد');
-            return res.status(201).json({
+            return res.status(StatusCodes.CREATED).json({
                 error: null,
                 data: {
-                    status: 201,
+                    status: StatusCodes.CREATED,
                     message: 'محصول مورد نظر با موفقیت ایجاد شد',
                     product: products,
                 },
@@ -37,7 +38,7 @@ class ProductController extends Controller {
         }
     };
     
-    async editProduct(req, res, next){
+    async updateProduct(req, res, next){
         try {
             
         } catch (error) {
@@ -46,7 +47,17 @@ class ProductController extends Controller {
     };
     async removeProduct(req, res, next){
         try {
-            
+            const { id } = req.params;
+            const product = await this.findProductById(id);
+            const removedProduct = await ProductsModel.deleteOne({_id: product.id});
+            if(removedProduct.deletedCount === 0) throw createHttpError.InternalServerError('محصول مورد نظر حذف نشد');
+            res.status(StatusCodes.OK).json({
+                error: null,
+                data: {
+                    message: 'حذف محصول با موفقیت انجام شد',
+                    status: StatusCodes.OK,
+                },
+            });
         } catch (error) {
             next(error);
         }
@@ -60,20 +71,16 @@ class ProductController extends Controller {
     };
     async getAllProducts(req, res, next){
         try {
-            const products = await ProductsModel.aggregate([
-                {
-                    $match: {}
-                },
-                {
-                    $project: {
-                        __v: 0,
-                    }
-                },
-            ]);
-            return res.status(200).json({
+            const { search = '' } = req.query;
+            const products = await(!!search ? ProductsModel.find({
+                $text: {
+                    $search: search,
+                }
+            }) : ProductsModel.find({}));
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data:{
-                    status: 200,
+                    status: StatusCodes.OK,
                     products,
                 },
             })
@@ -83,7 +90,15 @@ class ProductController extends Controller {
     };
     async getOneProduct(req, res, next){
         try {
-            
+            const { id } = req.params;
+            const product = await this.findProductById(id);
+            return res.status(StatusCodes.OK).json({
+                error: null,
+                data: {
+                    product,
+                    status: StatusCodes.OK,
+                }
+            });
         } catch (error) {
             next(error);
         }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { commentSchema } = require('./public.models');
 
-const Schema = new mongoose.Schema({
+const ProductSchema = new mongoose.Schema({
     title: {type: String, required: true},
     subtitle: {type: String, required: true},
     description: {type: String, required: true},
@@ -26,6 +26,8 @@ const Schema = new mongoose.Schema({
     versionKey: false,
 });
 
+ProductSchema.index({title: 'text', description: 'text'})
+
 module.exports = {
-    ProductsModel: mongoose.model('Products', Schema)
+    ProductsModel: mongoose.model('Products', ProductSchema)
 };

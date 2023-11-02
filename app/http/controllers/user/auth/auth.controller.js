@@ -5,6 +5,7 @@ const { ROLES } = require("../../../../utils/constans");
 const { UsersModel } = require("../../../../models/users.models");
 const { checkOtpSchema, getOtpSchema } = require("../../../validators/user/auth.schema");
 const { randomNumberGenerator, SignAccessToken, VerifyRefreshToken, SignRefreshToken } = require("../../../../utils/functions");
+const { StatusCodes } = require("http-status-codes");
 
 class UserAuthController extends Controller{
     async getOtp(req, res, next){
@@ -14,10 +15,10 @@ class UserAuthController extends Controller{
             const code = randomNumberGenerator(5);
             const result = await this.saveUser(mobile, code)
             if(!result) throw createHttpError.Unauthorized('login failed')
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    status: 200,
+                    status: StatusCodes.OK,
                     message: 'login is successfully!',
                     code,
                     mobile,
@@ -39,9 +40,10 @@ class UserAuthController extends Controller{
             if(+user.otp.expiresIn < now) createHttpError.Unauthorized('کد شما منقضی شده است');
             const accessToken = await SignAccessToken(user._id)
             const refreshToken = await SignRefreshToken(user._id);
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
+                    status: StatusCodes.OK,
                     accessToken,
                     refreshToken,
                 },
@@ -59,9 +61,10 @@ class UserAuthController extends Controller{
             if(!user) throw createHttpError.Unauthorized('شماره موبایل مورد نظر یافت نشد');
             const accessToken = await SignAccessToken(user?._id);
             const newRefreshToken = await SignRefreshToken(user?._id);
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
+                    status: StatusCodes.OK,
                     accessToken,
                     refreshToken: newRefreshToken
                 },

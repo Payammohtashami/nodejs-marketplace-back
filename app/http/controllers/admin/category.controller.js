@@ -3,6 +3,7 @@ const { CategoryModel } = require("../../../models/categories.models");
 const Controller = require("../controller");
 const { addCategorySchema, updateCategorySchema } = require("../../validators/admin/category.schema");
 const { default: mongoose } = require("mongoose");
+const { StatusCodes } = require("http-status-codes");
 
 class CategoryController extends Controller {
 
@@ -12,10 +13,10 @@ class CategoryController extends Controller {
             const { title, parent } = req.body;
             const category = await CategoryModel.create({title, parent});
             if(!category) throw createHttpError.InternalServerError('خطای سروری');
-            return res.status(200).json({
+            return res.status(StatusCodes.CREATED).json({
                 error: null,
                 data: {
-                    status: 200,
+                    status: StatusCodes.CREATED,
                     message: 'دسته بندی با موفقیت افزوده شد',
                 },
             });
@@ -33,10 +34,10 @@ class CategoryController extends Controller {
             if(!category) throw createHttpError.NotFound('دسته بندی مورد نظر یافت نشد');
             const resultOfUpdate = await CategoryModel.updateOne({_id: category._id}, {$set: {title}});
             if(resultOfUpdate.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی دسته بندی انجام نشد');
-            return res.status(201).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    status: 201,
+                    status: StatusCodes.OK,
                     message: 'دسته بندی با موفقیت به روز رسانی شد',
                     category: resultOfUpdate,
                 }
@@ -57,10 +58,10 @@ class CategoryController extends Controller {
                 ]
             });
             if(deleteResult.deletedCount === 0) throw createHttpError.InternalServerError('حذف دسته بندی انجام نشد');
-            return res.status(202).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    status: 202,
+                    status: StatusCodes.OK,
                     message: 'حذف دسته بندی با موفقیت انجام شد',
                 },
             })
@@ -98,9 +99,9 @@ class CategoryController extends Controller {
             //     }
             // ]);
             const categories = await CategoryModel.find({parent: undefined}, {__v: 0});
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
-                data: { status: 200, categories },
+                data: { status: StatusCodes.OK, categories },
             })
             
         } catch (error) {
@@ -134,10 +135,10 @@ class CategoryController extends Controller {
                     },
                 },
             ]);
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: { 
-                    status: 200, 
+                    status: StatusCodes.OK, 
                     category,
                 },
             })
@@ -149,10 +150,10 @@ class CategoryController extends Controller {
     async getAllParents(req, res, next){
         try {
             const parents = await CategoryModel.find({parent: null}, {__v: 0, parent: 0});
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    status: 200,
+                    status: StatusCodes.OK,
                     parents,
                 },
             })
@@ -165,10 +166,10 @@ class CategoryController extends Controller {
         try {
             const { parent } = req.params;
             const children = await CategoryModel.find({parent}, {__v: 0});
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    status: 200,
+                    status: StatusCodes.OK,
                     children,
                 },
             })
@@ -185,10 +186,10 @@ class CategoryController extends Controller {
                 }
             ]);
             if(!categories) throw createHttpError.InternalServerError('مشکل سروری به وجود آمده است'); 
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    status: 200,
+                    status: StatusCodes.OK,
                     categories,
                 }
             })
