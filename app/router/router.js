@@ -1,11 +1,9 @@
 const router = require('express').Router();
 const { HomeRoutes } = require('./api/router');
-const { categoryRoutes } = require('./admin/category.routes');
+const { AdminRoutes } = require('./admin/routes');
 const { UserAuthRoutes } = require('./user/auth.routes');
 const { DeveloperRoutes } = require('./developer.routes');
-const { blogsRoutes } = require('./admin/blog.routes');
 const { VerifyAccessToken, checkRole } = require('../http/middlewares/verifyAccessToken');
-const { productsRoutes } = require('./admin/product.routes');
 
 /**
  * @swagger
@@ -14,6 +12,8 @@ const { productsRoutes } = require('./admin/product.routes');
  *          description: developer-Utils
  *      -   name: Category(Admin-Panel)
  *          description: admins categories managment routes
+ *      -   name: Course(Admin-Panel)
+ *          description: admins courses, chapter and episode managment routes
  *      -   name: Blogs(Admin-Panel)
  *          description: admins blog managment routes
  *      -   name : Products(Admin-Panel)
@@ -23,10 +23,9 @@ const { productsRoutes } = require('./admin/product.routes');
  */
 
 
-router.use('/admin/products', VerifyAccessToken, checkRole('ADMIN'), productsRoutes);
-router.use('/admin/category', VerifyAccessToken, checkRole('ADMIN'), categoryRoutes);
-router.use('/admin/blog', VerifyAccessToken, checkRole('ADMIN'), blogsRoutes);
+
 router.use('/developer', DeveloperRoutes);
+router.use('/admin', VerifyAccessToken, checkRole('ADMIN'), AdminRoutes);
 router.use('/user', UserAuthRoutes);
 router.use('/', HomeRoutes);
 

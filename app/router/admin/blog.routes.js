@@ -41,7 +41,7 @@ const { storagePathName } = require('../../http/middlewares/storagePathName');
 
 /**
  * @swagger
- *  /api/admin/blog/list-all:
+ *  /api/admin/blog/list:
  *      get:
  *          tags: [Blogs(Admin-Panel)]
  *          summary: get all blogs
@@ -55,7 +55,7 @@ const { storagePathName } = require('../../http/middlewares/storagePathName');
  *              500: 
  *                  description: Internal Server Error 
  */
-router.get('/list-all', BlogController.getListOfBlogs);
+router.get('/list', BlogController.getListOfBlogs);
 
 /**
  * @swagger

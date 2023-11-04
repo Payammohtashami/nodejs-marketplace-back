@@ -50,7 +50,6 @@ class ProductController extends Controller {
             Object.keys(data).forEach(key => {
                 if(blockListValues.includes(key)) delete data[key];
             });
-            console.log(data);
             const updateProductResult = await ProductsModel.updateOne({_id: product._id}, {$set: data})
             if(updateProductResult.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی انجام نشد');
             res.status(StatusCodes.OK).json({
