@@ -4,12 +4,14 @@ const multer = require('multer');
 const path = require('path');
 
 function createRoute(req){
+    const storagePathname = "" + req.newStoragePathname;
+    console.log(storagePathname);
     const date = new Date();
     const year = "" + date.getFullYear();
     const month = "" + date.getMonth();
     const day = "" + date.getDate();
-    const directory = path.join(__dirname, "..", "..", 'public', 'uploads', 'blogs', year, month, day);
-    req.body.fileUploadPath = path.join('uploads', 'blogs', year, month, day)
+    const directory = path.join(__dirname, "..", "..", 'public', 'uploads', storagePathname, year, month, day);
+    req.body.fileUploadPath = path.join('uploads', storagePathname, year, month, day)
     fs.mkdirSync(directory, {recursive: true});
     return directory;
 };

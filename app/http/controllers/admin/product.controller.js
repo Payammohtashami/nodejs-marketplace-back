@@ -5,15 +5,14 @@ const createHttpError = require("http-errors");
 const { StatusCodes } =require('http-status-codes');
 const { ProductsModel } = require("../../../models/products.models");
 const { addProductsSchema } = require("../../validators/admin/products.schema");
-const { listOfImagesFromRequest, copyObject } = require('../../../utils/functions');
 const { ObjectIdValidator } = require('../../validators/public.validators');
+const { listOfImagesFromRequest, copyObject, deleteFileInPublic } = require('../../../utils/functions');
 
 class ProductController extends Controller {
     async addProduct(req, res, next){
         try {
             const images = listOfImagesFromRequest(req.files ?? [], req.body.fileUploadPath);
-            await addProductsSchema.validateAsync(req.body);
-            const {title, subtitle, description, tags, category, price, discount, avaliable_counts, height, width, weight, length } = req.body;
+            const {title, subtitle, description, tags, category, price, discount = 0, avaliable_counts, height, width, weight, length } = req.body;
             const auther = req.user._id;
             let features = {
                 height: +height ?? 0,
@@ -22,7 +21,9 @@ class ProductController extends Controller {
                 length: +length ?? 0,
             };
             let type = 'phisical';
-            if(!!height || !!width || !!length || !!weight) type = 'virtual'
+            if(!!height || !!width || !!length || !!weight) type = 'virtual';
+            req.body.type = type;
+            await addProductsSchema.validateAsync(req.body);
             const products = await ProductsModel.create({auther, title, subtitle, description, images, tags, category, features, type, discount, price, avaliable_counts});
             if(!products) throw createHttpError.InternalServerError('ثبت محصول انجام نشد');
             return res.status(StatusCodes.CREATED).json({
@@ -41,16 +42,21 @@ class ProductController extends Controller {
     
     async updateProduct(req, res, next){
         try {
+            const { id } = req.params;
+            const product = await this.findProductById(id);
             const data = copyObject(omitEmpty(req.body));
             data.images = listOfImagesFromRequest(req.files ?? [], req.body.fileUploadPath);
             const blockListValues = ['width', 'height', 'length', 'weight', 'bookmark', 'like'];
             Object.keys(data).forEach(key => {
                 if(blockListValues.includes(key)) delete data[key];
             });
+            console.log(data);
+            const updateProductResult = await ProductsModel.updateOne({_id: product._id}, {$set: data})
+            if(updateProductResult.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی انجام نشد');
             res.status(StatusCodes.OK).json({
                 error: null,
                 data: {
-                    product: data,
+                    product: updateProductResult,
                     status: StatusCodes.OK,
                     message: 'محصول با موفقیت ویرایش شد',
                 },
@@ -66,6 +72,7 @@ class ProductController extends Controller {
             const product = await this.findProductById(id);
             const removedProduct = await ProductsModel.deleteOne({_id: product.id});
             if(removedProduct.deletedCount === 0) throw createHttpError.InternalServerError('محصول مورد نظر حذف نشد');
+
             res.status(StatusCodes.OK).json({
                 error: null,
                 data: {

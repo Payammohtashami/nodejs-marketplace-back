@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { uploadFile } = require('../../utils/multer');
 const { stringToArray } = require('../../http/middlewares/stringToArray');
 const { BlogController } = require('../../http/controllers/admin/blog.controller');
+const { storagePathName } = require('../../http/middlewares/storagePathName');
 
 /**
  * @swagger
@@ -126,7 +127,7 @@ router.delete('/remove/:id', BlogController.removeBlogById);
  *              500: 
  *                  description: Internal Server Error 
  */
-router.post( '/add', uploadFile.single('image'), stringToArray('tags'),  BlogController.createBlog );
+router.post( '/add', storagePathName('blogs'), uploadFile.single('image'), stringToArray('tags'),  BlogController.createBlog );
 
 /**
  * @swagger
@@ -169,6 +170,6 @@ router.post( '/add', uploadFile.single('image'), stringToArray('tags'),  BlogCon
  *              500: 
  *                  description: Internal Server Error 
  */
-router.patch('/update/:id', uploadFile.single('image'), stringToArray('tags'),  BlogController.updateBlogById);
+router.patch('/update/:id', storagePathName('blogs'), uploadFile.single('image'), stringToArray('tags'),  BlogController.updateBlogById);
 
 module.exports = { blogsRoutes: router };

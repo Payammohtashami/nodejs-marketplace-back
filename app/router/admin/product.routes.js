@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { ProductController } = require('../../http/controllers/admin/product.controller');
+const { storagePathName } = require('../../http/middlewares/storagePathName');
 const { stringToArray } = require('../../http/middlewares/stringToArray');
 const { uploadFile } = require('../../utils/multer');
 
@@ -42,10 +43,10 @@ const { uploadFile } = require('../../utils/multer');
  *                      description: product teacher
  *                  avaliable_counts:
  *                      type: string
- *                      description: product teacher
+ *                      description: product avaliable counts
  *                  discount:
  *                      type: string
- *                      description: product teacher
+ *                      description: product discount
  *                  images:
  *                      type: array
  *                      description: product images
@@ -145,7 +146,7 @@ const { uploadFile } = require('../../utils/multer');
  *              500: 
  *                  description: Internal Server Error 
  */
-router.post('/add', uploadFile.array('images', 10), stringToArray('tags'), ProductController.addProduct);
+router.post('/add', storagePathName('products'), uploadFile.array('images', 10), stringToArray('tags'), ProductController.addProduct);
 
 /**
  * @swagger
@@ -245,6 +246,6 @@ router.delete('/remove/:id', ProductController.removeProduct);
  *              500: 
  *                  description: Internal Server Error 
  */
-router.put('/update/:id', uploadFile.array('images', 10), stringToArray('tags'),ProductController.updateProduct);
+router.put('/update/:id', storagePathName('products'), uploadFile.array('images', 10), stringToArray('tags'),ProductController.updateProduct);
 
 module.exports = { productsRoutes: router };
