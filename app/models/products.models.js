@@ -17,7 +17,7 @@ const ProductSchema = new mongoose.Schema({
     bookmark: {type: [mongoose.Types.ObjectId], default: []},
     format: {type: String},
     supplier: {type: mongoose.Types.ObjectId, required: false},
-    feature: {type: Object, default: {
+    features: {type: Object, default: {
         length: 0,
         width: 0,
         height: 0,

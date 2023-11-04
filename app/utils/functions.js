@@ -71,7 +71,12 @@ function listOfImagesFromRequest(files, fileUploadPath){
     } else return [];
 };
 
+function copyObject(object){
+    return JSON.parse(JSON.stringify(object));
+};
+
 module.exports = {
+    copyObject,
     SignAccessToken,
     SignRefreshToken,
     VerifyRefreshToken,

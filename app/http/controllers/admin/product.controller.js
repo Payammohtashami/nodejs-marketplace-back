@@ -1,10 +1,11 @@
 const path = require('path');
+const omitEmpty = require('omit-empty');
 const Controller = require("../controller");
 const createHttpError = require("http-errors");
 const { StatusCodes } =require('http-status-codes');
 const { ProductsModel } = require("../../../models/products.models");
 const { addProductsSchema } = require("../../validators/admin/products.schema");
-const { listOfImagesFromRequest } = require('../../../utils/functions');
+const { listOfImagesFromRequest, copyObject } = require('../../../utils/functions');
 const { ObjectIdValidator } = require('../../validators/public.validators');
 
 class ProductController extends Controller {
@@ -14,7 +15,7 @@ class ProductController extends Controller {
             await addProductsSchema.validateAsync(req.body);
             const {title, subtitle, description, tags, category, price, discount, avaliable_counts, height, width, weight, length } = req.body;
             const auther = req.user._id;
-            let feture = {
+            let features = {
                 height: +height ?? 0,
                 width: +width ?? 0,
                 weight: +weight ?? 0,
@@ -22,7 +23,7 @@ class ProductController extends Controller {
             };
             let type = 'phisical';
             if(!!height || !!width || !!length || !!weight) type = 'virtual'
-            const products = await ProductsModel.create({auther, title, subtitle, description, images, tags, category, feture, type, discount, price, avaliable_counts});
+            const products = await ProductsModel.create({auther, title, subtitle, description, images, tags, category, features, type, discount, price, avaliable_counts});
             if(!products) throw createHttpError.InternalServerError('ثبت محصول انجام نشد');
             return res.status(StatusCodes.CREATED).json({
                 error: null,
@@ -40,11 +41,25 @@ class ProductController extends Controller {
     
     async updateProduct(req, res, next){
         try {
-            
+            const data = copyObject(omitEmpty(req.body));
+            data.images = listOfImagesFromRequest(req.files ?? [], req.body.fileUploadPath);
+            const blockListValues = ['width', 'height', 'length', 'weight', 'bookmark', 'like'];
+            Object.keys(data).forEach(key => {
+                if(blockListValues.includes(key)) delete data[key];
+            });
+            res.status(StatusCodes.OK).json({
+                error: null,
+                data: {
+                    product: data,
+                    status: StatusCodes.OK,
+                    message: 'محصول با موفقیت ویرایش شد',
+                },
+            })
         } catch (error) {
             next(error);
-        }
+        };
     };
+
     async removeProduct(req, res, next){
         try {
             const { id } = req.params;
@@ -62,13 +77,7 @@ class ProductController extends Controller {
             next(error);
         }
     };
-    async updateProduct(req, res, next){
-        try {
-            
-        } catch (error) {
-            next(error);
-        }
-    };
+
     async getAllProducts(req, res, next){
         try {
             const { search = '' } = req.query;
@@ -88,6 +97,7 @@ class ProductController extends Controller {
             next(error);
         }
     };
+
     async getOneProduct(req, res, next){
         try {
             const { id } = req.params;

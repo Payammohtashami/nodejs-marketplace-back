@@ -4,13 +4,15 @@ const Controller = require("../controller");
 const { addCategorySchema, updateCategorySchema } = require("../../validators/admin/category.schema");
 const { default: mongoose } = require("mongoose");
 const { StatusCodes } = require("http-status-codes");
+const omitEmpty = require("omit-empty");
 
 class CategoryController extends Controller {
 
     async addCategory(req, res, next){
         try {
-            await addCategorySchema.validateAsync(req.body);
-            const { title, parent } = req.body;
+            const data = omitEmpty(req.body);
+            await addCategorySchema.validateAsync(data);
+            const { title, parent=null } = data;
             const category = await CategoryModel.create({title, parent});
             if(!category) throw createHttpError.InternalServerError('خطای سروری');
             return res.status(StatusCodes.CREATED).json({
