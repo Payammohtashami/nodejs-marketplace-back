@@ -27,6 +27,7 @@ const CourseSchema = new mongoose.Schema({
     bookmark: {type: [mongoose.Types.ObjectId], default: []},
     type: {type: String, default: 'FREE' /* FREE, CASH, VIP */, required: true},
     time: {type: String, default: '00:00:00'},
+    status: {type: String, default: 'NOT_STARTED'}, // NOT_STARTED, IN_PROGRESS, COMPLETED
     teacher: {type: mongoose.Types.ObjectId, ref: 'Users', required: true},
     chapters: {type: [chapter], default: []}
 }, {

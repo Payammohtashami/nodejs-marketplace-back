@@ -90,6 +90,30 @@ const { uploadFile } = require('../../utils/multer');
  */
 router.get('/list', CourseController.getAllCourse);
 
+/**
+ * @swagger
+ *  /api/admin/course/{id}:
+ *      get:
+ *          tags: [Course(Admin-Panel)]
+ *          summary: get course by id
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  require: true
+ *                  type: string
+ *                  description: find course by id
+ *          responses:
+ *              201: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+router.get('/:id', CourseController.getCourseById);
+
 
 /**
  * @swagger
