@@ -93,13 +93,13 @@ class CourseController extends Controller {
     };
 
     async findCourseById(id){
-        if(mongoose.isValidObjectId(id)) throw createHttpError.BadRequest('شناسه ارسال شده صحیح نمی باشد');
+        if(!mongoose.isValidObjectId(id)) throw createHttpError.BadRequest('شناسه ارسال شده صحیح نمی باشد');
         const course = await CourseModel.findById(id);
         if(!course) throw createHttpError.NotFound('دوره ای یافت نشد');
         return course;
     };
 };
 
-module.exports ={
-    CourseController: new CourseController()
+module.exports = {
+    CourseController: new CourseController(),
 };
