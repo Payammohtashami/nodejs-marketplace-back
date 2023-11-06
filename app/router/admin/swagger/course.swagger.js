@@ -60,6 +60,54 @@
  *                      description: course image
  */
 
+
+/**
+ * @swagger
+ *  definitions:
+ *      ListOfCourses:
+ *          type: object
+ *          properties:
+ *              status:
+ *                  type: integer
+ *                  example: 200
+ *              data:
+ *                  type: object
+ *                  properties:
+ *                      courses:
+ *                          type: array
+ *                          items:
+ *                              type: object
+ *                              properties:
+ *                                  _id:
+ *                                      type: string
+ *                                      example: "65466ea28a76d065b93c47f5"
+ *                                  title:
+ *                                      type: string
+ *                                      example: "course title (name)"
+ *                                  subtitle:
+ *                                      type: string
+ *                                      example: "course subtitle"
+ *                                  price:
+ *                                      type: string
+ *                                      example: "course price"
+ *                                  description:
+ *                                      type: string
+ *                                      example: "course description"
+ *                                  category:
+ *                                      type: string
+ *                                      example: "course category"
+ *                                  tags:
+ *                                      type: array
+ *                                      example: "course tags"
+ *                                  teacher:
+ *                                      type: string
+ *                                      example: "course teacher"
+ *                                  discount:
+ *                                      type: string
+ *                                      example: "course discount"
+ * 
+ */
+
 /**
  * @swagger
  *  /api/admin/course/list:
@@ -73,8 +121,12 @@
  *                  type: text
  *                  description: search in course name, description and subtitle
  *          responses:
- *              201: 
+ *              200: 
  *                  description: Success
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: "#/definitions/ListOfCourses"
  *              400: 
  *                  description: Bad Request
  *              401: 
@@ -96,7 +148,7 @@
  *                  type: string
  *                  description: find course by id
  *          responses:
- *              201: 
+ *              200:
  *                  description: Success
  *              400: 
  *                  description: Bad Request

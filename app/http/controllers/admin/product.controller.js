@@ -28,8 +28,8 @@ class ProductController extends Controller {
             if(!products) throw createHttpError.InternalServerError('ثبت محصول انجام نشد');
             return res.status(StatusCodes.CREATED).json({
                 error: null,
+                status: StatusCodes.CREATED,
                 data: {
-                    status: StatusCodes.CREATED,
                     message: 'محصول مورد نظر با موفقیت ایجاد شد',
                     product: products,
                 },
@@ -54,9 +54,9 @@ class ProductController extends Controller {
             if(updateProductResult.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی انجام نشد');
             res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
                     product: updateProductResult,
-                    status: StatusCodes.OK,
                     message: 'محصول با موفقیت ویرایش شد',
                 },
             })
@@ -74,9 +74,9 @@ class ProductController extends Controller {
 
             res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
                     message: 'حذف محصول با موفقیت انجام شد',
-                    status: StatusCodes.OK,
                 },
             });
         } catch (error) {
@@ -94,8 +94,8 @@ class ProductController extends Controller {
             }) : ProductsModel.find({}));
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data:{
-                    status: StatusCodes.OK,
                     products,
                 },
             })
@@ -110,9 +110,9 @@ class ProductController extends Controller {
             const product = await this.findProductById(id);
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
                     product,
-                    status: StatusCodes.OK,
                 }
             });
         } catch (error) {

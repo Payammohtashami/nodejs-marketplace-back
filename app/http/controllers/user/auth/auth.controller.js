@@ -17,8 +17,8 @@ class UserAuthController extends Controller{
             if(!result) throw createHttpError.Unauthorized('login failed')
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     message: 'login is successfully!',
                     code,
                     mobile,
@@ -42,8 +42,8 @@ class UserAuthController extends Controller{
             const refreshToken = await SignRefreshToken(user._id);
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     accessToken,
                     refreshToken,
                 },
@@ -63,8 +63,8 @@ class UserAuthController extends Controller{
             const newRefreshToken = await SignRefreshToken(user?._id);
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     accessToken,
                     refreshToken: newRefreshToken
                 },

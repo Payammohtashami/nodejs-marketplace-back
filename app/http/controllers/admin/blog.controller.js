@@ -18,9 +18,9 @@ class BlogController extends Controller {
             if(!blog) throw createHttpError.InternalServerError('بلاگ ساخته نشد');
             return res.status(StatusCodes.CREATED).json({
                 error: null,
+                status: StatusCodes.CREATED,
                 data: {
                     blog: req.body,
-                    status: StatusCodes.CREATED,
                     message: 'ساخت بلاگ با موفقیت انجام شد',
                 },
             });
@@ -36,8 +36,8 @@ class BlogController extends Controller {
             const blog = await this.findBlog({_id: id});
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     blog,
                 },
             })
@@ -85,8 +85,8 @@ class BlogController extends Controller {
             ]);
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     blogs,
                 },
             })
@@ -111,8 +111,8 @@ class BlogController extends Controller {
             if(result.deletedCount === 0) throw createHttpError.InternalServerError('حذف انجام نشد');
             return  res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     message: 'حذف مقاله با موفقیت انجام شد',
                 }
             })
@@ -137,9 +137,9 @@ class BlogController extends Controller {
             if(blog.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی انجام نشد');
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
                     blog: req.body,
-                    status: StatusCodes.OK,
                     message: 'به روز رسانی بلاگ با موفقیت انجام شد',
                 },
             });

@@ -19,9 +19,9 @@ class CourseController extends Controller {
             if(!course) throw createHttpError.InternalServerError('ثبت دوره انجام نشد');
             return res.status(StatusCodes.CREATED).json({
                 error: null,
+                status: StatusCodes.CREATED,
                 data: {
                     course,
-                    status: StatusCodes.CREATED,
                     message: 'دوره با موفقیت ایجاد شد',
                 },
             })
@@ -54,9 +54,9 @@ class CourseController extends Controller {
             else courses = await CourseModel.find({}).sort({_id: -1});
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
                     courses,
-                    status: StatusCodes.OK,
                 },
             });
         } catch (error) {
@@ -71,8 +71,8 @@ class CourseController extends Controller {
             if(!course) throw createHttpError.NotFound('دوره مورد نظر یافت نشد');
             return res.status(StatusCodes.OK).json({
                 error: null,
+                status: StatusCodes.OK,
                 data: {
-                    status: StatusCodes.OK,
                     course,
                 },
             });
