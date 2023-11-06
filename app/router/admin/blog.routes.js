@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { uploadFile } = require('../../utils/multer');
 const { stringToArray } = require('../../http/middlewares/stringToArray');
-const { BlogController } = require('../../http/controllers/admin/blog.controller');
+const { BlogController } = require('../../http/controllers/admin/blog/blog.controller');
 const { storagePathName } = require('../../http/middlewares/storagePathName');
 
 router.get('/list', BlogController.getListOfBlogs);

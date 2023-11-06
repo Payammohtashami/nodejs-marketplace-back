@@ -1,9 +1,10 @@
 const path = require('path');
-const Controller = require("../controller");
+const mongoose = require('mongoose');
+const Controller = require("../../controller");
 const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
-const { CourseModel } = require("../../../models/course.models");
-const { addCourseSchema } = require('../../validators/admin/course.schema');
+const { CourseModel } = require("../../../../models/course.models");
+const { addCourseSchema } = require('../../../validators/admin/course.schema');
 
 class CourseController extends Controller {
     async addCourse(req, res, next){
@@ -81,13 +82,7 @@ class CourseController extends Controller {
         };
     };
 
-    async addChapterToCourse(req, res, next){
-        try {
-            
-        } catch (error) {
-            next(error);
-        };
-    };
+
 
     async addEpisodeToChapter(req, res, next){
         try {
@@ -95,6 +90,13 @@ class CourseController extends Controller {
         } catch (error) {
             next(error);
         };
+    };
+
+    async findCourseById(id){
+        if(mongoose.isValidObjectId(id)) throw createHttpError.BadRequest('شناسه ارسال شده صحیح نمی باشد');
+        const course = await CourseModel.findById(id);
+        if(!course) throw createHttpError.NotFound('دوره ای یافت نشد');
+        return course;
     };
 };
 

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { CourseController } = require('../../http/controllers/admin/course.controller');
+const { CourseController } = require('../../http/controllers/admin/course/course.controller');
 const { storagePathName } = require('../../http/middlewares/storagePathName');
 const { uploadFile } = require('../../utils/multer');
 

@@ -1,7 +1,7 @@
 const createHttpError = require("http-errors");
-const { CategoryModel } = require("../../../models/categories.models");
-const Controller = require("../controller");
-const { addCategorySchema, updateCategorySchema } = require("../../validators/admin/category.schema");
+const { CategoryModel } = require("../../../../models/categories.models");
+const Controller = require("../../controller");
+const { addCategorySchema, updateCategorySchema } = require("../../../validators/admin/category.schema");
 const { default: mongoose } = require("mongoose");
 const { StatusCodes } = require("http-status-codes");
 const omitEmpty = require("omit-empty");

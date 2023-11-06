@@ -1,12 +1,12 @@
 const path = require('path');
 const omitEmpty = require('omit-empty');
-const Controller = require("../controller");
+const Controller = require("../../controller");
 const createHttpError = require("http-errors");
 const { StatusCodes } =require('http-status-codes');
-const { ProductsModel } = require("../../../models/products.models");
-const { addProductsSchema } = require("../../validators/admin/products.schema");
-const { ObjectIdValidator } = require('../../validators/public.validators');
-const { listOfImagesFromRequest, copyObject, deleteFileInPublic } = require('../../../utils/functions');
+const { ProductsModel } = require("../../../../models/products.models");
+const { addProductsSchema } = require("../../../validators/admin/products.schema");
+const { ObjectIdValidator } = require('../../../validators/public.validators');
+const { listOfImagesFromRequest, copyObject, deleteFileInPublic } = require('../../../../utils/functions');
 
 class ProductController extends Controller {
     async addProduct(req, res, next){

@@ -1,10 +1,10 @@
 const path = require('path');
 const omitEmpty = require('omit-empty');
-const Controller = require('../controller');
+const Controller = require('../../controller');
 const createHttpError = require('http-errors');
-const { BlogsModel } = require('../../../models/blogs.models');
-const { addBlogSchema } = require('../../validators/admin/blog.schema');
-const { deleteFileInPublic } = require('../../../utils/functions');
+const { BlogsModel } = require('../../../../models/blogs.models');
+const { addBlogSchema } = require('../../../validators/admin/blog.schema');
+const { deleteFileInPublic } = require('../../../../utils/functions');
 const { StatusCodes } = require('http-status-codes');
 
 class BlogController extends Controller {
