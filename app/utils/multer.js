@@ -47,12 +47,23 @@ function fileFilter(req, file, cb){
     };
 };
 
-const maxSize = 1 * 1000 * 1000
+function videoFilter(req, file, cb){
+    const ext = path.extname(file.originalname);
+    const mimeType = ['.mp4', '.mpg', '.avi', '.mov', '.mkv'];
+    if(mimeType.includes(ext)){
+        return cb(null, true);
+    } else {
+        cb(createHttpError.BadRequest('فرمت ارسال شده ویدئو صحیح نمی باشد'));
+    };
+};
 
-const uploadFile = multer({ storage, fileFilter, limits: {
-    fileSize: maxSize,
-} });
+const pictureMaxSize = 1 * 1000 * 1000
+const videomaxSize = 300 * 1000 * 1000
+
+const uploadFile = multer({ storage, fileFilter, limits: { fileSize: pictureMaxSize }});
+const uploadVideo = multer({ storage, videoFilter, limits: { fileSize: videomaxSize }});
 
 module.exports = {
     uploadFile,
+    uploadVideo,
 };

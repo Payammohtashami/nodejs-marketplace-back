@@ -2,10 +2,12 @@ const mongoose = require('mongoose');
 const { commentSchema } = require('./public.models');
 
 const Eposide = new mongoose.Schema({
+    type: {type: String, default: 'FREE'},
+    time: {type: String, default: '00:00:00', required: true},
     title: {type: String, required: true},
     description: {type: String, required: true},
-    type: {type: String, default: 'FREE'},
-    time: {type: String, default: '00:00', required: true},
+    videoAddress: {type: String, required: true},
+
 })
 const chapter = new mongoose.Schema({
     title: {type: String, required: true},

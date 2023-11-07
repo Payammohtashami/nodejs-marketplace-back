@@ -10,7 +10,7 @@
  *                  -   title
  *                  -   description
  *                  -   type
- *                  -   time
+ *                  -   video
  *              properties:
  *                  courseId:
  *                      type: string
@@ -29,8 +29,9 @@
  *                      enum:
  *                          -   UNLOCK
  *                          -   LOCK
- *                  time:
+ *                  video:
  *                      type: string
+ *                      format: binary
  *                      example: "00:21:05"
  */
 
@@ -66,7 +67,7 @@
  *          requestBody:
  *              required: true
  *              content:
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/AddEpisode'
  *          responses:
