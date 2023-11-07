@@ -17,6 +17,17 @@ const addCourseSchema = Joi.object({
     fileUploadPath: Joi.allow().error(createHttpError.BadRequest('fileUploadPath in not allowed')),
 });
 
+const addEpisodeSchema = Joi.object({
+    title: Joi.string().min(8).max(32).required().error(createHttpError.BadRequest('عنوان قسمت صحیح نمی باشد')),
+    type: Joi.string().required().regex(/(LOCK|UNLOCK)/i).error(createHttpError.BadRequest('نوع صحیح نمی باشد')),
+    time: Joi.string().required().regex(/[0-9]{2}\:[0-9]{2}\:[0-9]{2}/i).error(createHttpError.BadRequest('زمان وارد شده صحیح نمی باشد')),
+    description: Joi.string().error(createHttpError.BadRequest("متن ارسال شده صحیح نمی باشد")),
+    chapterId: Joi.string().regex(MONGO_ID_REGEX).error(createHttpError.BadRequest('شناسه فصل صحیح نمی باشد')),
+    courseId: Joi.string().regex(MONGO_ID_REGEX).error(createHttpError.BadRequest('شناسه دوره صحیح نمی باشد')),
+    fileUploadPath: Joi.allow().error(createHttpError.BadRequest('fileUploadPath in not allowed')),
+});
+
 module.exports = {
     addCourseSchema,
+    addEpisodeSchema,
 };

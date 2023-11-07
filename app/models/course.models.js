@@ -32,6 +32,9 @@ const CourseSchema = new mongoose.Schema({
     chapters: {type: [chapter], default: []}
 }, {
     versionKey: false,
+    toJSON: {
+        virtuals: true
+    },
 });
 
 CourseSchema.index({title: 'text', description: 'text', subtitle: 'text'});

@@ -9,6 +9,8 @@
  *          description: admins courses managment routes
  *      -   name: Chapter(Admin-Panel)
  *          description: admins chapter managment routes
+ *      -   name: Episode(Admin-Panel)
+ *          description: admins episode managment routes
  *      -   name: Blogs(Admin-Panel)
  *          description: admins blog managment routes
  *      -   name : Products(Admin-Panel)

@@ -75,7 +75,6 @@ class ChapterController extends Controller {
                     "chapters.$": data,
                 }
             });
-            console.log(data);
             if(updateChapterResult.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی فصل انجام نشد')
             return res.status(StatusCodes.OK).json({
                 error: null,
