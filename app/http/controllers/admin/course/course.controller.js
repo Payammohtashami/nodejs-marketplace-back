@@ -6,7 +6,7 @@ const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
 const { CourseModel } = require("../../../../models/course.models");
 const { addCourseSchema } = require('../../../validators/admin/course.schema');
-const { deleteFileInPublic, getTotalCourseTimes } = require('../../../../utils/functions');
+const { deleteFileInPublic, getTotalCourseTimes, copyObject, deleteBlockedItems } = require('../../../../utils/functions');
 
 class CourseController extends Controller {
     async addCourse(req, res, next){
@@ -37,16 +37,14 @@ class CourseController extends Controller {
         try {
             const { id } = req.params;
             const course = await this.findCourseById(id);
+            const blockListValues = ['fileUploadPath', 'filename', 'episode', 'chapters', 'comments', 'chapters', 'time', 'bookmark', 'like', 'discount'];
             const data = omitEmpty(req.body);
             if(req.file){
                 const { filename, fileUploadPath } = req.body;
                 data.image = path.join(fileUploadPath, filename).replace(/\\/g, '/');
                 deleteFileInPublic(course.image);
             };
-            let blockListValues = ['fileUploadPath', 'filename', 'episode', 'chapters', 'comments', 'chapters', 'time', 'bookmark', 'like', 'discount'];
-            Object.keys(data).forEach(key => {
-                if(blockListValues.includes(key)) delete data[key];
-            });
+            deleteBlockedItems(data, blockListValues)
             const updateCourseResult = await CourseModel.updateOne({_id: id}, {
                 $set: data
             });
@@ -74,16 +72,13 @@ class CourseController extends Controller {
 
     async getAllCourse(req, res, next){
         try {
-            const { search } = req.query;
-            let courses;
-            if(!!search) await CourseModel.find({$text: {$search: search}}).populate([
+            const { search } = copyObject(req.query);
+            const databaseQuery = {};
+            if(!!search) databaseQuery['$text'] = {$search: search};
+            const courses = await CourseModel.find(databaseQuery).populate([
                 {path: 'category', select: {title: 1, children: 0}},
                 {path: 'teacher', select: {first_name: 1, last_name: 1, mobile: 1, email: 1}},
             ]).sort({_id: -1})
-            else courses = await CourseModel.find({}).populate([
-                {path: 'category', select: {children: 0, parent: 0}},
-                {path: 'teacher', select: {first_name: 1, last_name: 1, mobile: 1, email: 1}},
-            ]).sort({_id: -1});
             return res.status(StatusCodes.OK).json({
                 error: null,
                 status: StatusCodes.OK,

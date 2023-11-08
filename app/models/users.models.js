@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     first_name: {type: String},
     last_name: {type: String},
     username: {type: String, lowercase: true},
@@ -25,6 +25,8 @@ const Schema = new mongoose.Schema({
     },
 });
 
+UserSchema.index({mobile: 'text', email: 'text', username: 'text'});
+
 module.exports = {
-    UsersModel: mongoose.model('Users', Schema)
+    UsersModel: mongoose.model('Users', UserSchema)
 };

@@ -2,7 +2,7 @@ const path = require('path');
 const omitEmpty = require('omit-empty');
 const Controller = require("../../controller");
 const createHttpError = require('http-errors');
-const { getTime, copyObject } = require('../../../../utils/functions');
+const { getTime, copyObject, deleteBlockedItems } = require('../../../../utils/functions');
 const { StatusCodes } = require('http-status-codes');
 const { CourseModel } = require('../../../../models/course.models');
 const { addEpisodeSchema } = require("../../../validators/admin/course.schema");
@@ -96,9 +96,7 @@ class EpisodeController extends Controller {
                 blockListValues.push('videoAddress');
             };
             const data = omitEmpty(req.body);
-            Object.keys(data).forEach(key => {
-                if(blockListValues.includes(key)) delete data[key];
-            });
+            deleteBlockedItems(data, blockListValues)
             const updateEpisodeResult = await CourseModel.updateOne({'chapters.episode._id': id}, {
                 $set: {
                     'chapters.$.episode': data,

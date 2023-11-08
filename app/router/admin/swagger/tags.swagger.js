@@ -5,6 +5,8 @@
  *          description: developer-Utils
  *      -   name: Category(Admin-Panel)
  *          description: admins categories managment routes
+ *      -   name: User(Admin-Panel)
+ *          description: admins users managment routes
  *      -   name: Course(Admin-Panel)
  *          description: admins courses managment routes
  *      -   name: Chapter(Admin-Panel)

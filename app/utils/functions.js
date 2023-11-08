@@ -118,11 +118,18 @@ function getTotalCourseTimes(chapters = []){
     return (hour + ':' + minute + ':' + second)
 };
 
+function deleteBlockedItems(objectValue, blockList){
+    Object.keys(objectValue).forEach(key => {
+        if(blockList.includes(key)) delete objectValue[key];
+    });
+};
+
 module.exports = {
     getTime,
     copyObject,
     SignAccessToken,
     SignRefreshToken,
+    deleteBlockedItems,
     VerifyRefreshToken,
     deleteFileInPublic,
     getTotalCourseTimes,

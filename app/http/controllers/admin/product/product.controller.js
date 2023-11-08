@@ -6,7 +6,7 @@ const { StatusCodes } =require('http-status-codes');
 const { ProductsModel } = require("../../../../models/products.models");
 const { addProductsSchema } = require("../../../validators/admin/products.schema");
 const { ObjectIdValidator } = require('../../../validators/public.validators');
-const { listOfImagesFromRequest, copyObject, deleteFileInPublic } = require('../../../../utils/functions');
+const { listOfImagesFromRequest, copyObject, deleteFileInPublic, deleteBlockedItems } = require('../../../../utils/functions');
 
 class ProductController extends Controller {
     async addProduct(req, res, next){
@@ -47,9 +47,7 @@ class ProductController extends Controller {
             const data = copyObject(omitEmpty(req.body));
             data.images = listOfImagesFromRequest(req.files ?? [], req.body.fileUploadPath);
             const blockListValues = ['width', 'height', 'length', 'weight', 'bookmark', 'like'];
-            Object.keys(data).forEach(key => {
-                if(blockListValues.includes(key)) delete data[key];
-            });
+            deleteBlockedItems(data, blockListValues);
             const updateProductResult = await ProductsModel.updateOne({_id: product._id}, {$set: data})
             if(updateProductResult.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی انجام نشد');
             res.status(StatusCodes.OK).json({
@@ -86,12 +84,10 @@ class ProductController extends Controller {
 
     async getAllProducts(req, res, next){
         try {
-            const { search = '' } = req.query;
-            const products = await(!!search ? ProductsModel.find({
-                $text: {
-                    $search: search,
-                }
-            }) : ProductsModel.find({}));
+            const { search } = copyObject(req.query);
+            const databaseQuery = {};
+            if(!!search) databaseQuery['$text'] = {$search: search};
+            const products = await ProductsModel.find(databaseQuery);
             return res.status(StatusCodes.OK).json({
                 error: null,
                 status: StatusCodes.OK,

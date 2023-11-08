@@ -4,7 +4,7 @@ const Controller = require('../../controller');
 const createHttpError = require('http-errors');
 const { BlogsModel } = require('../../../../models/blogs.models');
 const { addBlogSchema } = require('../../../validators/admin/blog.schema');
-const { deleteFileInPublic } = require('../../../../utils/functions');
+const { deleteFileInPublic, deleteBlockedItems } = require('../../../../utils/functions');
 const { StatusCodes } = require('http-status-codes');
 
 class BlogController extends Controller {
@@ -128,11 +128,9 @@ class BlogController extends Controller {
             if(req.body?.fileUploadPath && req.body?.filename){
                 req.body.image = path.join(req.body.fileUploadPath, req.body.filename).replace(/\\/g, '/');
             };
-            const blockList = ['bookmark', 'like', 'dislike', 'like', 'auther'];
+            const blockListValue = ['bookmark', 'like', 'dislike', 'like', 'auther'];
             const data = omitEmpty(req.body);
-            Object.keys(data).forEach((key) => {
-                if(!!blockList.includes(key)) delete data[key]  
-            })
+            deleteBlockedItems(data, blockListValue);
             const blog = await BlogsModel.updateOne({_id: id},{$set: data});
             if(blog.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی انجام نشد');
             return res.status(StatusCodes.OK).json({
