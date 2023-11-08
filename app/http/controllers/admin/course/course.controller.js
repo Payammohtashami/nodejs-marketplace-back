@@ -1,10 +1,12 @@
 const path = require('path');
 const mongoose = require('mongoose');
+const omitEmpty = require('omit-empty');
 const Controller = require("../../controller");
 const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
 const { CourseModel } = require("../../../../models/course.models");
 const { addCourseSchema } = require('../../../validators/admin/course.schema');
+const { deleteFileInPublic, getTotalCourseTimes } = require('../../../../utils/functions');
 
 class CourseController extends Controller {
     async addCourse(req, res, next){
@@ -33,7 +35,30 @@ class CourseController extends Controller {
 
     async updateCourse(req, res, next){
         try {
-            
+            const { id } = req.params;
+            const course = await this.findCourseById(id);
+            const data = omitEmpty(req.body);
+            if(req.file){
+                const { filename, fileUploadPath } = req.body;
+                data.image = path.join(fileUploadPath, filename).replace(/\\/g, '/');
+                deleteFileInPublic(course.image);
+            };
+            let blockListValues = ['fileUploadPath', 'filename', 'episode', 'chapters', 'comments', 'chapters', 'time', 'bookmark', 'like', 'discount'];
+            Object.keys(data).forEach(key => {
+                if(blockListValues.includes(key)) delete data[key];
+            });
+            const updateCourseResult = await CourseModel.updateOne({_id: id}, {
+                $set: data
+            });
+            if(updateCourseResult.modifiedCount === 0) throw createHttpError.InternalServerError('به روز رسانی دوره انجام نشد');
+            return res.status(StatusCodes.OK).json({
+                error: null,
+                status: StatusCodes.OK,
+                data: {
+                    course: data,
+                    message: 'دوره با موفقیت به روزرسانی شد شد',
+                },
+            })
         } catch (error) {
             next(error);
         };
@@ -75,6 +100,7 @@ class CourseController extends Controller {
         try {
             const { id } = req.params;
             const course = await CourseModel.findById(id);
+            course.time = getTotalCourseTimes(course.chapters);
             if(!course) throw createHttpError.NotFound('دوره مورد نظر یافت نشد');
             return res.status(StatusCodes.OK).json({
                 error: null,

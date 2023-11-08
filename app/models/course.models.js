@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { commentSchema } = require('./public.models');
+const { getTotalCourseTimes } = require('../utils/functions');
 
 const EposideSchema = new mongoose.Schema({
     type: {type: String, default: 'FREE'},
@@ -35,7 +36,6 @@ const CourseSchema = new mongoose.Schema({
     like: {type: [mongoose.Types.ObjectId], default: []},
     bookmark: {type: [mongoose.Types.ObjectId], default: []},
     type: {type: String, default: 'FREE' /* FREE, CASH, VIP */, required: true},
-    time: {type: String, default: '00:00:00'},
     status: {type: String, default: 'NOT_STARTED'}, // NOT_STARTED, IN_PROGRESS, COMPLETED
     teacher: {type: mongoose.Types.ObjectId, ref: 'Users', required: true},
     chapters: {type: [chapter], default: []}
@@ -49,6 +49,9 @@ const CourseSchema = new mongoose.Schema({
 CourseSchema.index({title: 'text', description: 'text', subtitle: 'text'});
 CourseSchema.virtual('imageURL').get(function(){
     return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`;
+})
+CourseSchema.virtual('time').get(function(){
+    return getTotalCourseTimes(this.chapters ?? []);
 })
 
 module.exports = {

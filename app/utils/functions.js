@@ -59,7 +59,6 @@ function VerifyRefreshToken(token){
     })
 };
 
-
 function deleteFileInPublic(fileAddress){
     const pathFile = "" + path.join(__dirname, '..', '..', 'public', fileAddress)
     fs.unlinkSync(pathFile);
@@ -92,6 +91,33 @@ function getTime(seconds){
     return (hours + ':' + minutes + ':' + second)
 };
 
+function getTotalCourseTimes(chapters = []){
+    let time, hour, minute, second = 0;
+    for(const { episode } of chapters){
+        if(Array.isArray(episode)){
+            for(let episodeItem of episode){
+                if(episodeItem?.time) time = episodeItem.time.split(":")
+                else time = '00:00:00'.split(':');
+                if(time.length === 3) {
+                    second += Number(time[0] * 3600);
+                    second += Number(time[1] * 60);
+                    second += Number(time[2]);
+                } else if(time.length === 2) {
+                    second += Number(time[0] * 60);
+                    second += Number(time[1]);
+                }
+            };
+        };
+    };
+    hour = Math.floor(second / 3600);
+    minute = Math.floor(second / 60) % 60;
+    second = Math.floor(second % 60);
+    if(String(hour).length === 1) hour = `0${hour}`;
+    if(String(second).length === 1) second = `0${second}`;
+    if(String(minute).length === 1) minute = `0${minute}`;
+    return (hour + ':' + minute + ':' + second)
+};
+
 module.exports = {
     getTime,
     copyObject,
@@ -99,6 +125,7 @@ module.exports = {
     SignRefreshToken,
     VerifyRefreshToken,
     deleteFileInPublic,
+    getTotalCourseTimes,
     randomNumberGenerator,
     listOfImagesFromRequest,
 };

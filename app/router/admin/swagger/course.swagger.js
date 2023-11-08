@@ -15,7 +15,7 @@
  * @swagger
  *  components:
  *      schemas:
- *          Course:
+ *          AddCourse:
  *              type: object
  *              required:
  *                  -   title
@@ -27,6 +27,39 @@
  *                  -   price
  *                  -   teacher
  *                  -   type
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: course title (name)
+ *                  subtitle:
+ *                      type: string
+ *                      description: course subtitle
+ *                  price:
+ *                      type: string
+ *                      description: course price
+ *                  description:
+ *                      type: string
+ *                      description: course description
+ *                  category:
+ *                      type: string
+ *                      description: course category
+ *                  tags:
+ *                      type: array
+ *                      description: course tags
+ *                  teacher:
+ *                      type: string
+ *                      description: course teacher
+ *                  discount:
+ *                      type: string
+ *                      description: course discount
+ *                  type:
+ *                      $ref: '#/components/schemas/Types'
+ *                  image:
+ *                      type: string
+ *                      format: binary
+ *                      description: course image
+ *          UpdateCourse:
+ *              type: object
  *              properties:
  *                  title:
  *                      type: string
@@ -171,7 +204,38 @@
  *              content:
  *                  multipart/form-data:
  *                      schema:
- *                          $ref: '#/components/schemas/Course'
+ *                          $ref: '#/components/schemas/AddCourse'
+ *          responses:
+ *              201: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+
+/**
+ * @swagger
+ *  /api/admin/course/update/{id}:
+ *      patch:
+ *          tags: [Course(Admin-Panel)]
+ *          summary: update and save new course
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  require: true
+ *                  type: string
+ *                  description: find course by id
+ *          consumes:
+ *          -   multipart/form-data
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  multipart/form-data:
+ *                      schema:
+ *                          $ref: '#/components/schemas/UpdateCourse'
  *          responses:
  *              201: 
  *                  description: Success
