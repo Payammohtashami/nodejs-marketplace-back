@@ -2,7 +2,7 @@ const string = require('@hapi/joi/lib/types/string');
 const mongoose = require('mongoose');
 const { commentSchema } = require('./public.models');
 
-const Schema = new mongoose.Schema({
+const BlogSchema = new mongoose.Schema({
     tags: {type: [String], default: []},
     text: {type: String, required: true},
     title: {type: String, required: true},
@@ -23,17 +23,21 @@ const Schema = new mongoose.Schema({
     },
 });
 
-Schema.virtual('Users', {
+BlogSchema.virtual('Users', {
     ref: 'Users',
     localField: '_id',
     foreignField: 'auther',
 });
 
-Schema.virtual('category_detail', {
+BlogSchema.virtual('category_detail', {
     ref: 'category',
     localField: '_id',
     foreignField: 'category',
 });
+BlogSchema.virtual('imageURL').get(function(){
+    return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`;
+})
+
 module.exports = {
-    BlogsModel: mongoose.model('Blogs', Schema)
+    BlogsModel: mongoose.model('Blogs', BlogSchema)
 };

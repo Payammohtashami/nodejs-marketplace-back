@@ -24,9 +24,15 @@ const ProductSchema = new mongoose.Schema({
     }},
 }, {
     versionKey: false,
+    toJSON: {
+        virtuals: true
+    }
 });
 
 ProductSchema.index({title: 'text', description: 'text'})
+ProductSchema.virtual('imagesURL').get(function(){
+    return this.images.map(image => `${process.env.BASE_URL}:${process.env.PORT}/${image}`);
+})
 
 module.exports = {
     ProductsModel: mongoose.model('Products', ProductSchema)

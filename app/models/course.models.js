@@ -1,18 +1,25 @@
 const mongoose = require('mongoose');
 const { commentSchema } = require('./public.models');
 
-const Eposide = new mongoose.Schema({
+const EposideSchema = new mongoose.Schema({
     type: {type: String, default: 'FREE'},
     time: {type: String, default: '00:00:00', required: true},
     title: {type: String, required: true},
     description: {type: String, required: true},
     videoAddress: {type: String, required: true},
+}, {
+    toJSON: {
+        virtuals: true
+    }
+});
+EposideSchema.virtual('videoURL').get(function(){
+    return `${process.env.BASE_URL}:${process.env.PORT}/${this.videoAddress}`;
+});
 
-})
 const chapter = new mongoose.Schema({
     title: {type: String, required: true},
     description: {type: String, default: ''},
-    episode: {type: [Eposide], default: []}
+    episode: {type: [EposideSchema], default: []}
 });
 
 const CourseSchema = new mongoose.Schema({
@@ -40,6 +47,9 @@ const CourseSchema = new mongoose.Schema({
 });
 
 CourseSchema.index({title: 'text', description: 'text', subtitle: 'text'});
+CourseSchema.virtual('imageURL').get(function(){
+    return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`;
+})
 
 module.exports = {
     CourseModel: mongoose.model('Course', CourseSchema)

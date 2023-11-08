@@ -33,6 +33,24 @@
  *                      type: string
  *                      format: binary
  *                      example: "00:21:05"
+ *          UpdateEpisode:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      example: "episde title one"
+ *                  description:
+ *                      type: string
+ *                      example: "lorem ipsum for episode description"
+ *                  type:
+ *                      type: string
+ *                      enum:
+ *                          -   UNLOCK
+ *                          -   LOCK
+ *                  video:
+ *                      type: string
+ *                      format: binary
+ *                      example: "00:21:05"
  */
 
 /**
@@ -108,9 +126,9 @@
 /**
  * @swagger
  *  /api/admin/episode/update/{id}:
- *      put:
+ *      patch:
  *          tags: [Episode(Admin-Panel)]
- *          summary: update category by id
+ *          summary: update episode info
  *          parameters:
  *          -   in: path
  *              type: string
@@ -119,7 +137,7 @@
  *          requestBody:
  *              required: true
  *              content:
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/UpdateEpisode'
  *          responses:

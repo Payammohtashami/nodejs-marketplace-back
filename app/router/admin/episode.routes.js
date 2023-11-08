@@ -7,6 +7,6 @@ const router = require('express').Router();
 router.get('/list/:id',  EpisodeController.episodeList);
 router.post('/add', storagePathName('course'), uploadVideo.single('video'),  EpisodeController.addEpisode);
 router.patch('/remove/:id',  EpisodeController.removeEpisodeById);
-router.put('/update/:id',  EpisodeController.updateEpisodeById);
+router.put('/update/:id', storagePathName('course'), uploadVideo.single('video'), EpisodeController.updateEpisodeById);
 
 module.exports = { episodeRoutes: router };
