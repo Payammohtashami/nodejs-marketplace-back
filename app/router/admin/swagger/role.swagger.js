@@ -2,29 +2,21 @@
  * @swagger
  *  components:
  *      schemas:
- *          Permissions:
- *              type: string
- *              enum:
- *                  -   blog
- *                  -   course
- *                  -   product
- */
-
-/**
- * @swagger
- *  components:
- *      schemas:
  *          Role:
  *              type: object
  *              required:
  *                  -   title
+ *                  -   description
  *              properties:
  *                  title:
  *                      type: string
- *                      description: Enter role title
+ *                      description: role title
+ *                  description:
+ *                      type: string
+ *                      description: role description
  *                  permissions:
- *                      $ref: '#/components/schemas/Permissions'
- *                      description: Enter role parent
+ *                      type: array
+ *                      description: permissions id list
  */
 
 
@@ -51,6 +43,9 @@
  *                                  title:
  *                                      type: string
  *                                      example: "Role title (name)"
+ *                                  description:
+ *                                      type: string
+ *                                      example: "Role description"
  *                                  permissions:
  *                                      type: array
  *                                      items:
@@ -76,12 +71,13 @@
  *      schemas:
  *          Edit-Role:
  *              type: object
- *              required:
- *                  -   title
  *              properties:
  *                  title:
  *                      type: string
- *                      description: Enter categories title
+ *                      description: role title 
+ *                  description:
+ *                      type: string
+ *                      description: role description
  *                  permissions:
  *                      $ref: '#/components/schemas/Permissions'
  *                      description: Enter categories parent
@@ -166,14 +162,14 @@
 
 /**
  * @swagger
- *  /api/admin/role/remove/{id}:
+ *  /api/admin/role/remove/{field}:
  *      delete:
  *          tags: [RBAC(Admin-Panel)]
  *          summary: remove role
  *          parameters:
  *              -   in: path
  *                  type: string
- *                  name: id
+ *                  name: field
  *                  required: true
  *          responses:
  *              200:

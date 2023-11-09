@@ -5,15 +5,15 @@
  *          Permission:
  *              type: object
  *              required:
- *                  -   title
+ *                  -   name
  *                  -   description
  *              properties:
- *                  title:
+ *                  name:
  *                      type: string
- *                      description: Enter permission title
+ *                      description: Enter permission name
  *                  description:
  *                      type: string
- *                      description: Enter permission title
+ *                      description: Enter permission name
  */
 
 
@@ -37,9 +37,9 @@
  *                                  _id:
  *                                      type: string
  *                                      example: "65466ea28a76d065b93c47f5"
- *                                  title:
+ *                                  name:
  *                                      type: string
- *                                      example: "Role title (name)"
+ *                                      example: "Role name (name)"
  *                                  description:
  *                                      type: string
  *                                      example: "permissions description"
@@ -52,17 +52,15 @@
  * @swagger
  *  components:
  *      schemas:
- *          Edit-Role:
+ *          Edit-Permission:
  *              type: object
- *              required:
- *                  -   title
  *              properties:
- *                  title:
+ *                  name:
  *                      type: string
- *                      description: Enter categories title
- *                  permissions:
- *                      $ref: '#/components/schemas/Permissions'
- *                      description: Enter categories parent
+ *                      description: permission name
+ *                  description:
+ *                      type: string
+ *                      description: permission description
  */
 
 /**
@@ -75,7 +73,7 @@
  *          -   in: query
  *              name: search
  *              type: string
- *              description: text for search in title & description
+ *              description: text for search in name & description
  *          responses:
  *              200: 
  *                  description: Success
