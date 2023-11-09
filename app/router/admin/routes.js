@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { roleRoutes } = require('./role.routes');
 const { usersRoutes } = require('./user.routes');
 const { blogsRoutes } = require('./blog.routes');
 const { courseRoutes } = require('./course.routes');
@@ -6,8 +7,12 @@ const { chapterRoutes } = require('./chapter.routes');
 const { episodeRoutes } = require('./episode.routes');
 const { categoryRoutes } = require('./category.routes');
 const { productsRoutes } = require('./product.routes');
+const { permissionRoutes } = require('./permission.routes');
 
 router.use('/user', usersRoutes);
+
+router.use('/role', roleRoutes);
+router.use('/permission', permissionRoutes);
 
 router.use('/blog', blogsRoutes);
 
