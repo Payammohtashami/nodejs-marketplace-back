@@ -27,6 +27,7 @@ class PermissionController extends Controller {
         try {
             const data = await addPermissionSchema.validateAsync(req.body);
             await this.findPermissionWithTitle(data.name)
+            console.log(data);
             const role = await PermissionsModel.create(data);
             if(!role) throw createHttpError.InternalServerError('سطح دسترسی مورد نظر ایجاد نشد');
             return res.status(StatusCodes.OK).json({
@@ -85,7 +86,6 @@ class PermissionController extends Controller {
 
     async findPermissionWithId(id){
         const permission = await PermissionsModel.findOne({_id: id});
-        console.log(permission);
         if(!permission) throw createHttpError.NotFound('سطج دسترسی مورد نظر یافت نشد')
         return permission
     };

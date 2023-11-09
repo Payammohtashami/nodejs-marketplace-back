@@ -38,7 +38,7 @@ class RoleController extends Controller {
             });
         } catch (error) {
             next(error);
-        }
+        };
     };
 
     async removeRole(req, res, next){
@@ -56,7 +56,7 @@ class RoleController extends Controller {
             });
         } catch (error) {
             next(error);
-        }
+        };
     };
 
     async updateRoleById(req, res, next){
@@ -75,7 +75,7 @@ class RoleController extends Controller {
             });
         } catch (error) {
             next(error);
-        }
+        };
     };
 
     async findRoleWithTitle(title){

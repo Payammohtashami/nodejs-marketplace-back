@@ -8,20 +8,22 @@ const { episodeRoutes } = require('./episode.routes');
 const { categoryRoutes } = require('./category.routes');
 const { productsRoutes } = require('./product.routes');
 const { permissionRoutes } = require('./permission.routes');
+const { checkPermissions } = require('../../http/middlewares/permission.guard');
+const { PERMISSIONS } = require('../../utils/constans');
 
-router.use('/user', usersRoutes);
+router.use('/user', checkPermissions([]), usersRoutes);
 
-router.use('/role', roleRoutes);
-router.use('/permission', permissionRoutes);
+router.use('/role', checkPermissions([]), roleRoutes);
+router.use('/permission', checkPermissions([]), permissionRoutes);
 
-router.use('/blog', blogsRoutes);
+router.use('/blog', checkPermissions([PERMISSIONS.TEACHER, PERMISSIONS.WRITER]),blogsRoutes);
 
-router.use('/course', courseRoutes);
-router.use('/chapter', chapterRoutes);
-router.use('/episode', episodeRoutes);
+router.use('/course', checkPermissions([PERMISSIONS.WRITER, PERMISSIONS.TEACHER]),courseRoutes);
+router.use('/chapter', checkPermissions([PERMISSIONS.TEACHER]),chapterRoutes);
+router.use('/episode', checkPermissions([PERMISSIONS.TEACHER]),episodeRoutes);
 
-router.use('/category', categoryRoutes);
+router.use('/category', checkPermissions([PERMISSIONS.WRITER]),categoryRoutes);
 
-router.use('/products', productsRoutes);
+router.use('/products', checkPermissions([PERMISSIONS.WRITER]),productsRoutes);
 
 module.exports = { AdminRoutes: router };

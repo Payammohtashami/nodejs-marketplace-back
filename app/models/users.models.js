@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
         code: 0,
         expiresIn: 0
     }},
-    roles : {type : [String], default : ["USER"]},
+    role: {type : String, default : "USER"},
     bills: {type: [], default: []},
     discount: {type: Number, default: 0},
     birthday: {type: String},
