@@ -14,7 +14,6 @@ const BlogSchema = new mongoose.Schema({
     like: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
     deslike: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
     bookmark: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
-    
 }, {
     timestamps: true,
     versionKey: false,

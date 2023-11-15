@@ -11,7 +11,7 @@ const { permissionRoutes } = require('./permission.routes');
 const { checkPermissions } = require('../../http/middlewares/permission.guard');
 const { PERMISSIONS } = require('../../utils/constans');
 
-router.use('/user', checkPermissions([]), usersRoutes);
+router.use('/user', usersRoutes);
 
 router.use('/role', checkPermissions([]), roleRoutes);
 router.use('/permission', checkPermissions([]), permissionRoutes);

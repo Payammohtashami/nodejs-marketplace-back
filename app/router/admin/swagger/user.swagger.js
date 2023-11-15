@@ -47,6 +47,24 @@
 
 /**
  * @swagger
+ *  /api/admin/user/profile:
+ *      get:
+ *          tags: [User(Admin-Panel)]
+ *          summary: get user information
+ *          responses:
+ *              200: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+
+
+/**
+ * @swagger
  *  /api/admin/user/update/{id}:
  *      patch:
  *          tags: [User(Admin-Panel)]
