@@ -1,0 +1,31 @@
+{
+    products{
+        _id
+        description
+        tags
+        price
+        title
+        subtitle
+        images
+        imagesURL
+        comments
+        count
+        avaliable_counts
+        type
+        supplier
+        features{
+            width
+            height
+            length
+        }
+        auther{
+            _id
+            first_name
+            last_name
+        }
+        category{
+            _id
+            title
+        }
+    }
+}

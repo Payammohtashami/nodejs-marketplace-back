@@ -1,0 +1,21 @@
+{
+    category{
+        _id
+        title
+        children{
+            _id
+            title
+        }
+    }    
+}
+
+{
+    categoriesChild(parent: "655e14d7913e3c39252afc0e"){
+        _id
+        title
+        children{
+            _id
+            title
+        }
+    }    
+}

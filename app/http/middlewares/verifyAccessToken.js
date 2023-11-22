@@ -30,7 +30,28 @@ function VerifyAccessToken(req, res, next){
     }
 };
 
+function VerifyAccessTokenInGraphGL(req, res, next){
+    try {
+        const token = getToken(req.headers);
+        jwt.verify(token, ACCESS_TOKEN_SECRET_KEY, async (err, payload) => {
+            try {
+                if(err) return createHttpError.Unauthorized('وارد حساب کاربری خود شوید');
+                const { mobile } = payload || {};
+                const user = await UsersModel.findOne({mobile}, {password: 0, otp: 0, bills: 0});
+                if(!user) throw createHttpError.Unauthorized('کاربر یافت نشد')
+                req.user = user;
+                return;
+            } catch (error) {
+                throw createHttpError.Unauthorized(error?.message);
+            }
+        });
+    } catch (error) {
+        throw createHttpError.Unauthorized(error?.message);
+    }
+};
+
 
 module.exports = { 
-    VerifyAccessToken
+    VerifyAccessToken,
+    VerifyAccessTokenInGraphGL,
 };
