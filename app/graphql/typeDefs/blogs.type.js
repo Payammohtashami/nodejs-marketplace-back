@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLString, GraphQLList } = require("graphql");
-const { AutherType } = require("./public.type");
+const { AutherType, CategoryType } = require("./public.type");
 
 const BlogType = new GraphQLObjectType({
     name: 'blog',
@@ -11,7 +11,7 @@ const BlogType = new GraphQLObjectType({
         subtitle: {type: GraphQLString},
         image: {type: GraphQLString},
         auther: {type: AutherType},
-        category: {type: GraphQLString},
+        category: {type: CategoryType},
         comments: {type: new GraphQLList(GraphQLString)},
         // like: {type: new GraphQLList(), defualt: []},
         // deslike: {type: [mongoose.Types.ObjectId], defualt: []},

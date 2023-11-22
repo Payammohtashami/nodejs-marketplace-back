@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
     bills: {type: [], default: []},
     discount: {type: Number, default: 0},
     birthday: {type: String},
+    basket: {type: String},
     courses: {type: [mongoose.Types.ObjectId], ref: 'Course', default: []},
 },{
     versionKey: false,

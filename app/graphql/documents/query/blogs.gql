@@ -1,0 +1,21 @@
+{
+    blogs{
+        _id
+        text
+        tags
+        title
+        subtitle
+        image
+        imageURL
+        comments
+        auther{
+            _id
+            first_name
+            last_name
+        }
+        category{
+            _id
+            title
+        }
+    }
+}

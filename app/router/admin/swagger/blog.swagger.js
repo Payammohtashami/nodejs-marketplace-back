@@ -106,7 +106,7 @@
  *          requestBody:
  *              required: true
  *              content:
- *                  multipart/formdata:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/CreateBlog'
  *          responses:
