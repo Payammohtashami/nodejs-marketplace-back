@@ -1,7 +1,15 @@
-const { GraphQLObjectType, GraphQLString } = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLScalarType, Kind } = require("graphql");
+const { toObject, parseLiteral } = require("../utils");
 
-const AutherType = new GraphQLObjectType({
-    name: 'auther',
+const AnyType = new GraphQLScalarType({
+    name: 'anyType',
+    parseValue: toObject,
+    serialize: toObject,
+    parseLiteral: parseLiteral,
+});
+
+const UserType = new GraphQLObjectType({
+    name: 'user',
     fields: {
         first_name: {type: GraphQLString},
         last_name: {type: GraphQLString},
@@ -17,8 +25,17 @@ const CategoryType = new GraphQLObjectType({
     },
 });
 
+const ResponseType = new GraphQLObjectType({
+    name: 'responseType',
+    fields: {
+        status: {type: GraphQLString},
+        data: {type: AnyType},
+    }
+});
 
 module.exports = {
-    AutherType,
+    AnyType,
+    UserType,
     CategoryType,
+    ResponseType,
 };

@@ -1,12 +1,12 @@
 const { GraphQLObjectType, GraphQLString, GraphQLList } = require("graphql");
-const { CategoryType } = require("./public.type");
+const { AnyType } = require("./public.type");
 
 const CategoriesType = new GraphQLObjectType({
     name: 'categories',
     fields: {
         _id: {type: GraphQLString},
         title: {type: GraphQLString},
-        children: {type: new GraphQLList(CategoryType)}
+        children: {type: new GraphQLList(AnyType)}
     }
 });
 
