@@ -1,3 +1,4 @@
+const { commentType } = require("./comment.type");
 const { UserType, CategoryType } = require("./public.type");
 const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLInt } = require("graphql");
 
@@ -21,7 +22,7 @@ const ProductsType = new GraphQLObjectType({
         imagesURL: {type: new GraphQLList(GraphQLString)},
         description: {type: GraphQLString},
         category: {type: CategoryType},
-        comments: {type: new GraphQLList(GraphQLString)},
+        comments: {type: new GraphQLList(commentType)},
         auther: {type: UserType},
         price: {type: GraphQLInt},
         count: {type: GraphQLInt},

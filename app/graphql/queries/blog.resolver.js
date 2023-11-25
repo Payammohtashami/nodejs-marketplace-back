@@ -13,7 +13,12 @@ const BlogResolver = {
         const findQuery = !!category ? { category } : {};
         const { req } = context;
         req.user = await VerifyAccessTokenInGraphGL(req);
-        return await BlogsModel.find(findQuery).populate(['auther', 'category']);
+        return await BlogsModel.find(findQuery).populate([
+            {path: 'auther'}, 
+            {path: 'category'}, 
+            {path: 'comments.user'},
+            {path: 'comments.answers.user'},
+        ]);
     },
 };
 

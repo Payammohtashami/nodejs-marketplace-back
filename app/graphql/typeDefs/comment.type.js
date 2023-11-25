@@ -1,21 +1,26 @@
-const { UserType, AnyType } = require("./public.type");
-const { GraphQLObjectType, GraphQLString, GraphQLBoolean } = require("graphql");
+const { UserType } = require("./public.type");
+const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLList } = require("graphql");
 
-const parentOfCommentType = new GraphQLObjectType({
-    name: 'parentOfCommentType',
+const anwserOfCommentType = new GraphQLObjectType({
+    name: 'anwserOfCommentType',
     fields: {
+        _id: {type: GraphQLString},
         user: {type: UserType},
+        show: {type: GraphQLBoolean},
         comment: {type: GraphQLString},
+        createdAt: {type: GraphQLString},
     },
 }); 
 
 const commentType = new GraphQLObjectType({
     name: 'commentsType',
     fields: {
+        _id: {type: GraphQLString},
         user: {type: UserType},
         comment: {type: GraphQLString},
-        parent: {type: parentOfCommentType},
+        answers: {type: new GraphQLList(anwserOfCommentType)},
         show: {type: GraphQLBoolean},
+        createdAt: {type: GraphQLString},
         openToComment: {type: GraphQLBoolean},
     }
 });

@@ -11,9 +11,10 @@ const AnyType = new GraphQLScalarType({
 const UserType = new GraphQLObjectType({
     name: 'user',
     fields: {
-        first_name: {type: GraphQLString},
-        last_name: {type: GraphQLString},
         _id: {type: GraphQLString},
+        mobile: {type: GraphQLString},
+        last_name: {type: GraphQLString},
+        first_name: {type: GraphQLString},
     },
 });
 
