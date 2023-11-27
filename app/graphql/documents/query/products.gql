@@ -8,11 +8,31 @@
         subtitle
         images
         imagesURL
-        comments
         count
         avaliable_counts
         type
         supplier
+        comments {
+            _id
+            comment
+            createdAt
+            answer {
+                _id
+                comment
+                user {
+                    _id
+                    mobile
+                    last_name
+                    first_name
+                }   
+            }
+            user {
+                _id
+                mobile
+                last_name
+                first_name
+            }
+        }
         features{
             width
             height

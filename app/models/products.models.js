@@ -13,8 +13,9 @@ const ProductSchema = new mongoose.Schema({
     count: {type: Number},
     avaliable_counts: {type: Number},
     type: {type: String, required: true},
-    like: {type: [mongoose.Types.ObjectId], default: []},
-    bookmark: {type: [mongoose.Types.ObjectId], default: []},
+    likes: {type: [mongoose.Types.ObjectId], ref: "Users", default: []},
+    deslikes: {type: [mongoose.Types.ObjectId], ref: "Users", default: []},
+    bookmark: {type: [mongoose.Types.ObjectId], ref: "Users", default: []},
     format: {type: String},
     supplier: {type: mongoose.Types.ObjectId, required: false},
     features: {type: Object, default: {

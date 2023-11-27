@@ -1,0 +1,35 @@
+mutation{
+    createCommentForBlogs(
+        comment: "secend anwser", 
+        parent: "65623c1d033c8aee373160cb",
+        blogID: "65624586cb40eb4f6831b7c3"
+    )
+    {
+        status
+        data
+    }
+}
+
+mutation {
+  createCommentForCourses(
+        comment: "secend anwser", 
+        parent: "65623c1d033c8aee373160cb",
+        blogID: "65624586cb40eb4f6831b7c3"
+    )
+    {
+        status
+        data
+    }
+}
+
+mutation {
+  createCommentForProducts(
+        comment: "secend anwser", 
+        parent: "65623c1d033c8aee373160cb",
+        blogID: "65624586cb40eb4f6831b7c3"
+    )
+    {
+        status
+        data
+    }
+}

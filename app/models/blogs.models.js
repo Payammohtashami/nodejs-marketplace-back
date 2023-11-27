@@ -11,8 +11,8 @@ const BlogSchema = new mongoose.Schema({
     auther: {type: mongoose.Types.ObjectId, ref: 'Users', required: true},
     category: {type: [mongoose.Types.ObjectId], required: true, ref: 'Category'},
     comments: {type: [commentSchema], defualt: []},
-    like: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
-    deslike: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
+    likes: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
+    deslikes: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
     bookmark: {type: [mongoose.Types.ObjectId], ref: 'Users', defualt: []},
 }, {
     timestamps: true,

@@ -33,8 +33,9 @@ const CourseSchema = new mongoose.Schema({
     category: {type: mongoose.Types.ObjectId, ref: 'Category', required: true},
     price: {type: Number, required: true},
     discount: {type: Number},
-    like: {type: [mongoose.Types.ObjectId], default: []},
-    bookmark: {type: [mongoose.Types.ObjectId], default: []},
+    likes: {type: [mongoose.Types.ObjectId], ref: "Users", default: []},
+    deslikes: {type: [mongoose.Types.ObjectId], ref: "Users", default: []},
+    bookmark: {type: [mongoose.Types.ObjectId], ref: "Users", default: []},
     type: {type: String, default: 'FREE' /* FREE, CASH, VIP */, required: true},
     status: {type: String, default: 'NOT_STARTED'}, // NOT_STARTED, IN_PROGRESS, COMPLETED
     teacher: {type: mongoose.Types.ObjectId, ref: 'Users', required: true},

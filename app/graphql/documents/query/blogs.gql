@@ -1,5 +1,5 @@
 {
-    blogs{
+    blogs {
         _id
         text
         tags
@@ -7,13 +7,34 @@
         subtitle
         image
         imageURL
-        comments
-        auther{
+        comments {
             _id
-            first_name
-            last_name
+            comment
+            createdAt
+            answer {
+                _id
+                comment
+                user {
+                    _id
+                    mobile
+                    last_name
+                    first_name
+                }   
+            }
+            user {
+                _id
+                mobile
+                last_name
+                first_name
+            }
         }
-        category{
+        auther {
+            _id
+            mobile
+            last_name
+            first_name
+        }
+        category {
             _id
             title
         }
