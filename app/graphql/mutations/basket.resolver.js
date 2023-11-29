@@ -72,14 +72,7 @@ const AddCourseToBasket = {
         const product = await findCourseInBasket(user._id, courseID);
         let addProductResult;
         if(product){
-            addProductResult = await UsersModel.updateOne({
-                _id: user._id,
-                'basket.course.courseID': courseID
-            }, {
-                $inc: {
-                    'basket.course.$.count': 1
-                }
-            });
+            throw createHttpError.NotFound('این دوره در سبد خرید شما وجود دارد');
         } else {
             addProductResult = await UsersModel.updateOne({
                 _id: user._id,
@@ -91,13 +84,13 @@ const AddCourseToBasket = {
                     },
                 }
             })
-        };
-        if(addProductResult.modifiedCount === 0) throw createHttpError.InternalServerError('اضافه شدن دوره به سبد خرید با مشکل مواجه شد');
-        return {
-            status: StatusCodes.OK,
-            data: {
-                message: 'دوره به سبد خرید افزوده شد',
-            },
+            if(addProductResult.modifiedCount === 0) throw createHttpError.InternalServerError('اضافه شدن دوره به سبد خرید با مشکل مواجه شد');
+            return {
+                status: StatusCodes.OK,
+                data: {
+                    message: 'دوره به سبد خرید افزوده شد',
+                },
+            };
         };
     },
 };
@@ -162,7 +155,7 @@ const RemoveCourseToBasket = {
         const Course = await findCourseInBasket(user._id, courseID);
         if(!Course) throw createHttpError.NotFound('دوره مورد نظر در سبد شما وجود ندارد');
         let addCourseResult;
-        if(Course){
+        if(Course && Course?.count > 1){
             addCourseResult = await UsersModel.updateOne({
                 _id: user._id,
                 'basket.course.courseID': courseID
@@ -206,7 +199,7 @@ async function findProductInBasket(userID, productID){
 };
 
 async function findCourseInBasket(userID, courseID){
-    const result = await UsersModel.findOne({_id: userID, 'basket.course.productID': courseID});
+    const result = await UsersModel.findOne({_id: userID, 'basket.course.courseID': courseID});
     const courses = copyObject(result);
     return courses?.basket?.course[0];
 };

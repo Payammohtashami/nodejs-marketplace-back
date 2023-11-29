@@ -7,10 +7,15 @@ const { createCommentForBlogs, createCommentForCourses, createCommentForProducts
 const { LikeAndDislikeProducts } = require("./mutations/likeAndDeslike.resolver");
 const { BookmarksProducts, BookmarksBlogs, BookmarksCourses } = require("./mutations/bookmarks.resolver");
 const { AddProductToBasket, AddCourseToBasket, RemoveCourseToBasket, RemoveProductToBasket } = require("./mutations/basket.resolver");
+const { getUserBasket, getUserBookmarkedBlogs, getUserBookmarkedCourses, getUserBookmarkedProducts } = require("./queries/user-profile.resolver");
 
 const RootQuery = new GraphQLObjectType({
     name: 'rootQuery',
     fields: {
+        getUserBasket,
+        getUserBookmarkedBlogs,
+        getUserBookmarkedCourses,
+        getUserBookmarkedProducts,
         blogs: BlogResolver,
         courses: CourseResolver,
         products: ProductsResolver,
